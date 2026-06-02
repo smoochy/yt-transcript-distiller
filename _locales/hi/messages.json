@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "YouTube ट्रांसक्रिप्ट प्राप्त करता है और Google Gemini AI से सारांश बनाता है।"
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "लोड हो रहा है…"
+  },
+  "btn_thinking": {
+    "message": "AI सोच रहा है…"
+  },
+  "btn_injecting": {
+    "message": "डाला जा रहा है…"
+  },
+  "btn_done": {
+    "message": "हो गया ✓"
+  },
+  "btn_error": {
+    "message": "त्रुटि!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – सेटिंग्स"
+  },
+  "lbl_apikey": {
+    "message": "Gemini API कुंजी"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ मुफ़्त कुंजी पाएं"
+  },
+  "btn_show": {
+    "message": "दिखाएं"
+  },
+  "btn_hide": {
+    "message": "छुपाएं"
+  },
+  "lbl_prompt": {
+    "message": "प्रॉम्प्ट"
+  },
+  "btn_reset": {
+    "message": "↺ रीसेट"
+  },
+  "lbl_lang": {
+    "message": "उत्तर की भाषा"
+  },
+  "btn_cancel": {
+    "message": "रद्द करें"
+  },
+  "btn_save": {
+    "message": "सहेजें"
+  },
+  "msg_saved": {
+    "message": "सहेजा गया ✓"
+  },
+  "msg_save_error": {
+    "message": "सहेजने में त्रुटि!"
+  },
+  "msg_no_key": {
+    "message": "कृपया API कुंजी दर्ज करें।"
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – सेटिंग्स"
+  },
+  "opt_subtitle": {
+    "message": "Michael Ruck द्वारा · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "यहाँ से मुफ़्त API कुंजी प्राप्त करें:"
+  },
+  "opt_prompt_hint": {
+    "message": "यह प्रॉम्प्ट ट्रांसक्रिप्ट के साथ Gemini को भेजा जाता है।"
+  },
+  "opt_lang_hint": {
+    "message": "डिफ़ॉल्ट: ब्राउज़र भाषा। फ़ॉलबैक: अंग्रेज़ी।"
+  },
+  "lang_ar": {
+    "message": "अरबी"
+  },
+  "lang_zh": {
+    "message": "चीनी (सरलीकृत)"
+  },
+  "lang_en": {
+    "message": "अंग्रेज़ी"
+  },
+  "lang_fr": {
+    "message": "फ़्रांसीसी"
+  },
+  "lang_de": {
+    "message": "जर्मन"
+  },
+  "lang_hi": {
+    "message": "हिन्दी"
+  },
+  "lang_ja": {
+    "message": "जापानी"
+  },
+  "lang_ko": {
+    "message": "कोरियाई"
+  },
+  "lang_pt": {
+    "message": "पुर्तगाली"
+  },
+  "lang_ru": {
+    "message": "रूसी"
+  },
+  "lang_es": {
+    "message": "स्पेनिश"
+  },
+  "default_prompt": {
+    "message": "ट्रांसक्रिप्ट के सबसे महत्वपूर्ण बिंदुओं को YouTube टिप्पणी के रूप में सारांशित करें।\n\nएक एकल परिचयात्मक शब्ح से शुरू करें (जैसे 'सारांश:' 'मुख्य बिंदु:') -- कभी भी पूरे वाक्य से शुरू न करें।\n\nफ॒ॉर्मेटिंग नियम:\n• • का उपयोग करें\n• 1. 2. 3. उपयोग करें जब संख्या निर्धारित हो\n• प्रत्येक के बाद खाली पंक्ति\n• केवल कीवर्ड को *बोल्ड* करें\n• कोई Markdown नहीं, HTML नहीं, इंडेंटेशन नहीं"
+  },
+  "err_no_key": {
+    "message": "कोई Gemini API कुंजी सेट नहीं है। कृपया ऐड-ऑन सेटिंग्स में दर्ज करें।"
+  },
+  "err_no_transcript": {
+    "message": "कोई ट्रांसक्रिप्ट उपलब्ध नहीं। इस वीडियो में शायद सबटाइटल नहीं हैं।"
+  },
+  "err_no_comments": {
+    "message": "टिप्पणी अनुभाग नहीं मिला। पहले टिप्पणियों तक स्क्रॉल करें।"
+  },
+  "err_no_field": {
+    "message": "टिप्पणी फ़ील्ड नहीं मिली। सुनिश्चित करें कि आप लॉग इन हैं।"
+  },
+  "err_no_editor": {
+    "message": "प्लेसहोल्डर क्लिक करने के बाद एडिटर नहीं आया।"
+  },
+  "footer_generated": {
+    "message": "Transcript Distiller द्वारा सारांशित"
+  }
+}

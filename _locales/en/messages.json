@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "Fetches YouTube transcripts and summarizes them with Google Gemini AI."
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "Fetching…"
+  },
+  "btn_thinking": {
+    "message": "AI thinking…"
+  },
+  "btn_injecting": {
+    "message": "Injecting…"
+  },
+  "btn_done": {
+    "message": "Done ✓"
+  },
+  "btn_error": {
+    "message": "Error!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – Settings"
+  },
+  "lbl_apikey": {
+    "message": "Gemini API Key"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ Get free key"
+  },
+  "btn_show": {
+    "message": "Show"
+  },
+  "btn_hide": {
+    "message": "Hide"
+  },
+  "lbl_prompt": {
+    "message": "Prompt"
+  },
+  "btn_reset": {
+    "message": "↺ Reset"
+  },
+  "lbl_lang": {
+    "message": "Response language"
+  },
+  "btn_cancel": {
+    "message": "Cancel"
+  },
+  "btn_save": {
+    "message": "Save"
+  },
+  "msg_saved": {
+    "message": "Saved ✓"
+  },
+  "msg_save_error": {
+    "message": "Error saving!"
+  },
+  "msg_no_key": {
+    "message": "Please enter an API key."
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – Settings"
+  },
+  "opt_subtitle": {
+    "message": "by Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "Get a free API key at"
+  },
+  "opt_prompt_hint": {
+    "message": "This prompt is sent to Gemini together with the transcript."
+  },
+  "opt_lang_hint": {
+    "message": "Default: browser language. Fallback: English."
+  },
+  "lang_ar": {
+    "message": "Arabic"
+  },
+  "lang_zh": {
+    "message": "Chinese (Simplified)"
+  },
+  "lang_en": {
+    "message": "English"
+  },
+  "lang_fr": {
+    "message": "French"
+  },
+  "lang_de": {
+    "message": "German"
+  },
+  "lang_hi": {
+    "message": "Hindi"
+  },
+  "lang_ja": {
+    "message": "Japanese"
+  },
+  "lang_ko": {
+    "message": "Korean"
+  },
+  "lang_pt": {
+    "message": "Portuguese"
+  },
+  "lang_ru": {
+    "message": "Russian"
+  },
+  "lang_es": {
+    "message": "Spanish"
+  },
+  "default_prompt": {
+    "message": "Summarize the most important points of the transcript as a YouTube comment.\n\nStart with a single introductory word (e.g. 'Summary:', 'Highlights:', 'Takeaways:') -- never a full sentence.\n\nFormatting rules:\n• Use • as bullet point\n• Use 1. 2. 3. when a specific number is expected\n• Add a blank line after each point\n• Highlight only individual keywords or sub-headings in *bold*, not entire sentences\n• Separate sections with a blank line\n• No Markdown (no **, no ##, no -)\n• No HTML tags, no indentation"
+  },
+  "err_no_key": {
+    "message": "No Gemini API key set. Please enter one in the add-on settings."
+  },
+  "err_no_transcript": {
+    "message": "No transcript available. This video may not have subtitles."
+  },
+  "err_no_comments": {
+    "message": "Comment section not found. Scroll to the comments first."
+  },
+  "err_no_field": {
+    "message": "Comment input not found. Make sure you are logged in."
+  },
+  "err_no_editor": {
+    "message": "Editor did not appear after clicking the placeholder."
+  },
+  "footer_generated": {
+    "message": "boiled down by Transcript Distiller"
+  }
+}

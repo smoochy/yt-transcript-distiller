@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "获取 YouTube 字幕并使用 Google Gemini AI 进行摘要。"
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "加载中…"
+  },
+  "btn_thinking": {
+    "message": "AI 思考中…"
+  },
+  "btn_injecting": {
+    "message": "插入中…"
+  },
+  "btn_done": {
+    "message": "完成 ✓"
+  },
+  "btn_error": {
+    "message": "错误！"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – 设置"
+  },
+  "lbl_apikey": {
+    "message": "Gemini API 密钥"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ 获取免费密钥"
+  },
+  "btn_show": {
+    "message": "显示"
+  },
+  "btn_hide": {
+    "message": "隐藏"
+  },
+  "lbl_prompt": {
+    "message": "提示词"
+  },
+  "btn_reset": {
+    "message": "↺ 重置"
+  },
+  "lbl_lang": {
+    "message": "回复语言"
+  },
+  "btn_cancel": {
+    "message": "取消"
+  },
+  "btn_save": {
+    "message": "保存"
+  },
+  "msg_saved": {
+    "message": "已保存 ✓"
+  },
+  "msg_save_error": {
+    "message": "保存失败！"
+  },
+  "msg_no_key": {
+    "message": "请输入 API 密钥。"
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – 设置"
+  },
+  "opt_subtitle": {
+    "message": "作者：Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "在以下地址获取免费 API 密钥："
+  },
+  "opt_prompt_hint": {
+    "message": "此提示词将与字幕一起发送给 Gemini。"
+  },
+  "opt_lang_hint": {
+    "message": "默认：浏览器语言。备用：英语。"
+  },
+  "lang_ar": {
+    "message": "阿拉伯语"
+  },
+  "lang_zh": {
+    "message": "中文（简体）"
+  },
+  "lang_en": {
+    "message": "英语"
+  },
+  "lang_fr": {
+    "message": "法语"
+  },
+  "lang_de": {
+    "message": "德语"
+  },
+  "lang_hi": {
+    "message": "印地语"
+  },
+  "lang_ja": {
+    "message": "日语"
+  },
+  "lang_ko": {
+    "message": "韩语"
+  },
+  "lang_pt": {
+    "message": "葡萄牙语"
+  },
+  "lang_ru": {
+    "message": "俄语"
+  },
+  "lang_es": {
+    "message": "西班牙语"
+  },
+  "default_prompt": {
+    "message": "将字幕中最重要的内容总结为 YouTube 评论。\n\n以单个引导词开头（如「摘要：」、「要点：」）-- 绝不用完整句子开头。\n\n格式规则：\n• 使用 • 作为项目符号\n• 如果期望特定数量，使用 1. 2. 3.\n• 每条后添加空行\n• 只对单个关键词使用*粗体*\n• 用空行分隔各部分\n• 不使用 Markdown，不使用 HTML 标签，不缩进"
+  },
+  "err_no_key": {
+    "message": "未设置 Gemini API 密钥，请在扩展设置中输入。"
+  },
+  "err_no_transcript": {
+    "message": "无可用字幕，此视频可能没有字幕。"
+  },
+  "err_no_comments": {
+    "message": "未找到评论区，请先滚动到评论部分。"
+  },
+  "err_no_field": {
+    "message": "未找到评论输入框，请确保已登录。"
+  },
+  "err_no_editor": {
+    "message": "点击输入框后编辑器未出现。"
+  },
+  "footer_generated": {
+    "message": "由 Transcript Distiller 提炼"
+  }
+}

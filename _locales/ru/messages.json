@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "Получает транскрипции YouTube и резюмирует их с помощью Google Gemini AI."
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "Загрузка…"
+  },
+  "btn_thinking": {
+    "message": "ИИ думает…"
+  },
+  "btn_injecting": {
+    "message": "Вставка…"
+  },
+  "btn_done": {
+    "message": "Готово ✓"
+  },
+  "btn_error": {
+    "message": "Ошибка!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – Настройки"
+  },
+  "lbl_apikey": {
+    "message": "API-ключ Gemini"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ Получить бесплатный ключ"
+  },
+  "btn_show": {
+    "message": "Показать"
+  },
+  "btn_hide": {
+    "message": "Скрыть"
+  },
+  "lbl_prompt": {
+    "message": "Запрос"
+  },
+  "btn_reset": {
+    "message": "↺ Сбросить"
+  },
+  "lbl_lang": {
+    "message": "Язык ответа"
+  },
+  "btn_cancel": {
+    "message": "Отмена"
+  },
+  "btn_save": {
+    "message": "Сохранить"
+  },
+  "msg_saved": {
+    "message": "Сохранено ✓"
+  },
+  "msg_save_error": {
+    "message": "Ошибка при сохранении!"
+  },
+  "msg_no_key": {
+    "message": "Пожалуйста, введите API-ключ."
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – Настройки"
+  },
+  "opt_subtitle": {
+    "message": "от Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "Получите бесплатный API-ключ на"
+  },
+  "opt_prompt_hint": {
+    "message": "Этот запрос отправляется в Gemini вместе с транскрипцией."
+  },
+  "opt_lang_hint": {
+    "message": "По умолчанию: язык браузера. Резервный: английский."
+  },
+  "lang_ar": {
+    "message": "Арабский"
+  },
+  "lang_zh": {
+    "message": "Китайский (упрощённый)"
+  },
+  "lang_en": {
+    "message": "Английский"
+  },
+  "lang_fr": {
+    "message": "Французский"
+  },
+  "lang_de": {
+    "message": "Немецкий"
+  },
+  "lang_hi": {
+    "message": "Хинди"
+  },
+  "lang_ja": {
+    "message": "Японский"
+  },
+  "lang_ko": {
+    "message": "Корейский"
+  },
+  "lang_pt": {
+    "message": "Португальский"
+  },
+  "lang_ru": {
+    "message": "Русский"
+  },
+  "lang_es": {
+    "message": "Испанский"
+  },
+  "default_prompt": {
+    "message": "Резюмируй наиболее важные моменты в виде комментария YouTube.\n\nНачни с одного вводного слова (напр. 'Итого:', 'Главное:', 'Выводы:') -- никогда не с полным предложением.\n\nПравила:\n• Используй • как маркер\n• Используй 1. 2. 3. если ожидается определённое количество\n• Добавляй пустую строку после каждого пункта\n• Выделяй *жирным* только отдельные ключевые слова\n• Без Markdown, HTML, отступов"
+  },
+  "err_no_key": {
+    "message": "API-ключ Gemini не задан. Пожалуйста, введите его в настройках расширения."
+  },
+  "err_no_transcript": {
+    "message": "Транскрипция недоступна. Возможно, у этого видео нет субтитров."
+  },
+  "err_no_comments": {
+    "message": "Раздел комментариев не найден. Прокрутите страницу до комментариев."
+  },
+  "err_no_field": {
+    "message": "Поле комментария не найдено. Убедитесь, что вы вошли в систему."
+  },
+  "err_no_editor": {
+    "message": "Редактор не появился после нажатия на поле."
+  },
+  "footer_generated": {
+    "message": "сжато с помощью Transcript Distiller"
+  }
+}

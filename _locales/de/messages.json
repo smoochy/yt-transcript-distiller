@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "Ruft YouTube-Transkripte ab und fasst sie mit Google Gemini AI zusammen."
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "Lade Transkript…"
+  },
+  "btn_thinking": {
+    "message": "AI denkt…"
+  },
+  "btn_injecting": {
+    "message": "Injiziere…"
+  },
+  "btn_done": {
+    "message": "Fertig ✓"
+  },
+  "btn_error": {
+    "message": "Fehler!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – Einstellungen"
+  },
+  "lbl_apikey": {
+    "message": "Gemini API-Key"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ Gratis Key holen"
+  },
+  "btn_show": {
+    "message": "Anzeigen"
+  },
+  "btn_hide": {
+    "message": "Verbergen"
+  },
+  "lbl_prompt": {
+    "message": "Prompt"
+  },
+  "btn_reset": {
+    "message": "↺ Reset"
+  },
+  "lbl_lang": {
+    "message": "Antwortsprache"
+  },
+  "btn_cancel": {
+    "message": "Abbrechen"
+  },
+  "btn_save": {
+    "message": "Speichern"
+  },
+  "msg_saved": {
+    "message": "Gespeichert ✓"
+  },
+  "msg_save_error": {
+    "message": "Fehler beim Speichern!"
+  },
+  "msg_no_key": {
+    "message": "Bitte API-Key eingeben."
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – Einstellungen"
+  },
+  "opt_subtitle": {
+    "message": "von Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "Gratis API-Key holen bei"
+  },
+  "opt_prompt_hint": {
+    "message": "Dieser Prompt wird zusammen mit dem Transkript an Gemini geschickt."
+  },
+  "opt_lang_hint": {
+    "message": "Standard: Browsersprache. Fallback: Englisch."
+  },
+  "lang_ar": {
+    "message": "Arabisch"
+  },
+  "lang_zh": {
+    "message": "Chinesisch (Vereinfacht)"
+  },
+  "lang_en": {
+    "message": "Englisch"
+  },
+  "lang_fr": {
+    "message": "Französisch"
+  },
+  "lang_de": {
+    "message": "Deutsch"
+  },
+  "lang_hi": {
+    "message": "Hindi"
+  },
+  "lang_ja": {
+    "message": "Japanisch"
+  },
+  "lang_ko": {
+    "message": "Koreanisch"
+  },
+  "lang_pt": {
+    "message": "Portugiesisch"
+  },
+  "lang_ru": {
+    "message": "Russisch"
+  },
+  "lang_es": {
+    "message": "Spanisch"
+  },
+  "default_prompt": {
+    "message": "Fasse die wichtigsten Punkte des Transkripts als YouTube-Kommentar zusammen.\n\nBeginne mit einem einzigen einleitenden Wort (z.B. 'Zusammenfassung:', 'Highlights:', 'Kernpunkte:') -- niemals mit einem ganzen Satz.\n\nFormatierungsregeln:\n• Verwende • als Aufzaehlungszeichen\n• Nummeriere mit 1. 2. 3. wenn eine bestimmte Anzahl erwartet wird\n• Fuege nach jedem Punkt eine Leerzeile ein\n• Hebe nur einzelne Schluesselbegriffe oder Unter-Ueberschriften mit *Fettschrift* hervor\n• Trenne Abschnitte mit einer Leerzeile\n• Kein Markdown (kein **, kein ##, kein -)\n• Keine HTML-Tags, keine Einrueckungen"
+  },
+  "err_no_key": {
+    "message": "Kein Gemini API-Key gesetzt. Bitte unter Add-on-Einstellungen eintragen."
+  },
+  "err_no_transcript": {
+    "message": "Kein Transkript verfügbar. Das Video hat möglicherweise keine Untertitel."
+  },
+  "err_no_comments": {
+    "message": "Kommentarbereich nicht gefunden. Scrolle zuerst zur Kommentarsektion."
+  },
+  "err_no_field": {
+    "message": "Kommentar-Eingabefeld nicht gefunden. Stelle sicher, dass du eingeloggt bist."
+  },
+  "err_no_editor": {
+    "message": "Editor-Feld erschien nicht nach Klick auf Placeholder."
+  },
+  "footer_generated": {
+    "message": "Eingedampft mit Transcript Distiller"
+  }
+}

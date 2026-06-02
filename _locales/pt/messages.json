@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "Obtém transcrições do YouTube e resume-as com o Google Gemini AI."
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "A carregar…"
+  },
+  "btn_thinking": {
+    "message": "IA a pensar…"
+  },
+  "btn_injecting": {
+    "message": "A inserir…"
+  },
+  "btn_done": {
+    "message": "Concluído ✓"
+  },
+  "btn_error": {
+    "message": "Erro!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – Definições"
+  },
+  "lbl_apikey": {
+    "message": "Chave API Gemini"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ Obter chave gratuita"
+  },
+  "btn_show": {
+    "message": "Mostrar"
+  },
+  "btn_hide": {
+    "message": "Ocultar"
+  },
+  "lbl_prompt": {
+    "message": "Instrução"
+  },
+  "btn_reset": {
+    "message": "↺ Repor"
+  },
+  "lbl_lang": {
+    "message": "Idioma da resposta"
+  },
+  "btn_cancel": {
+    "message": "Cancelar"
+  },
+  "btn_save": {
+    "message": "Guardar"
+  },
+  "msg_saved": {
+    "message": "Guardado ✓"
+  },
+  "msg_save_error": {
+    "message": "Erro ao guardar!"
+  },
+  "msg_no_key": {
+    "message": "Por favor, introduza uma chave API."
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – Definições"
+  },
+  "opt_subtitle": {
+    "message": "por Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "Obtenha uma chave API gratuita em"
+  },
+  "opt_prompt_hint": {
+    "message": "Esta instrução é enviada ao Gemini juntamente com a transcrição."
+  },
+  "opt_lang_hint": {
+    "message": "Predefinição: idioma do navegador. Alternativa: inglês."
+  },
+  "lang_ar": {
+    "message": "Árabe"
+  },
+  "lang_zh": {
+    "message": "Chinês (simplificado)"
+  },
+  "lang_en": {
+    "message": "Inglês"
+  },
+  "lang_fr": {
+    "message": "Francês"
+  },
+  "lang_de": {
+    "message": "Alemão"
+  },
+  "lang_hi": {
+    "message": "Hindi"
+  },
+  "lang_ja": {
+    "message": "Japonês"
+  },
+  "lang_ko": {
+    "message": "Coreano"
+  },
+  "lang_pt": {
+    "message": "Português"
+  },
+  "lang_ru": {
+    "message": "Russo"
+  },
+  "lang_es": {
+    "message": "Espanhol"
+  },
+  "default_prompt": {
+    "message": "Resume os pontos mais importantes da transcricao como comentario do YouTube.\n\nComece com uma unica palavra introdutoria (ex. 'Resumo:', 'Destaques:') -- nunca uma frase completa.\n\nRegras de formatacao:\n• Usa • como marcador\n• Usa 1. 2. 3. quando se espera um numero especifico\n• Adiciona uma linha em branco apos cada ponto\n• Destaca apenas palavras-chave individuais em *negrito*\n• Separa as seccoes com uma linha em branco\n• Sem Markdown (sem **, ##, -)\n• Sem etiquetas HTML, sem indentacao"
+  },
+  "err_no_key": {
+    "message": "Nenhuma chave API Gemini definida. Por favor, introduza uma nas definições."
+  },
+  "err_no_transcript": {
+    "message": "Nenhuma transcrição disponível. Este vídeo pode não ter legendas."
+  },
+  "err_no_comments": {
+    "message": "Secção de comentários não encontrada. Desloque-se primeiro para os comentários."
+  },
+  "err_no_field": {
+    "message": "Campo de comentário não encontrado. Certifique-se de que está autenticado."
+  },
+  "err_no_editor": {
+    "message": "O editor não apareceu após clicar no marcador."
+  },
+  "footer_generated": {
+    "message": "destilado por Transcript Distiller"
+  }
+}

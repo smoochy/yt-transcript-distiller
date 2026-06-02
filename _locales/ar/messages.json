@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "يجلب نصوص يوتيوب ويلخصها باستخدام Google Gemini AI."
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "جارٍ التحميل…"
+  },
+  "btn_thinking": {
+    "message": "الذكاء الاصطناعي يفكر…"
+  },
+  "btn_injecting": {
+    "message": "جارٍ الإدراج…"
+  },
+  "btn_done": {
+    "message": "تم ✓"
+  },
+  "btn_error": {
+    "message": "خطأ!"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – الإعدادات"
+  },
+  "lbl_apikey": {
+    "message": "مفتاح API لـ Gemini"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ احصل على مفتاح مجاني"
+  },
+  "btn_show": {
+    "message": "إظهار"
+  },
+  "btn_hide": {
+    "message": "إخفاء"
+  },
+  "lbl_prompt": {
+    "message": "الطلب"
+  },
+  "btn_reset": {
+    "message": "↺ إعادة تعيين"
+  },
+  "lbl_lang": {
+    "message": "لغة الرد"
+  },
+  "btn_cancel": {
+    "message": "إلغاء"
+  },
+  "btn_save": {
+    "message": "حفظ"
+  },
+  "msg_saved": {
+    "message": "تم الحفظ ✓"
+  },
+  "msg_save_error": {
+    "message": "خطأ في الحفظ!"
+  },
+  "msg_no_key": {
+    "message": "يرجى إدخال مفتاح API."
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – الإعدادات"
+  },
+  "opt_subtitle": {
+    "message": "بقلم Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "احصل على مفتاح API مجاني من"
+  },
+  "opt_prompt_hint": {
+    "message": "يُرسَل هذا الطلب إلى Gemini مع النص."
+  },
+  "opt_lang_hint": {
+    "message": "الافتراضي: لغة المتصفح. الاحتياطي: الإنجليزية."
+  },
+  "lang_ar": {
+    "message": "العربية"
+  },
+  "lang_zh": {
+    "message": "الصينية (المبسطة)"
+  },
+  "lang_en": {
+    "message": "الإنجليزية"
+  },
+  "lang_fr": {
+    "message": "الفرنسية"
+  },
+  "lang_de": {
+    "message": "الألمانية"
+  },
+  "lang_hi": {
+    "message": "الهندية"
+  },
+  "lang_ja": {
+    "message": "اليابانية"
+  },
+  "lang_ko": {
+    "message": "الكورية"
+  },
+  "lang_pt": {
+    "message": "البرتغالية"
+  },
+  "lang_ru": {
+    "message": "الروسية"
+  },
+  "lang_es": {
+    "message": "الإسبانية"
+  },
+  "default_prompt": {
+    "message": "لخّص أهم نقاط النص كتعليق على يوتيوب.\n\nابدأ بكلمة تمهيدية واحدة (مثل 'ملخص:' أو 'أبرز النقاط:') -- لا تبدأ أبداً بجملة كاملة.\n\nقواعد التنسيق:\n• استخدم • كنقطة\n• استخدم 1. 2. 3. إذا كان عدد محدد متوقعاً\n• أضف سطراً فارغاً بعد كل نقطة\n• ضع *خطاً عريضاً* على الكلمات المفتاحية فقط\n• لا Markdown، لا HTML، لا مسافات بادئة"
+  },
+  "err_no_key": {
+    "message": "لم يتم تعيين مفتاح API لـ Gemini. يرجى إدخاله في إعدادات الإضافة."
+  },
+  "err_no_transcript": {
+    "message": "لا توجد نصوص متاحة. قد لا يحتوي هذا الفيديو على ترجمات."
+  },
+  "err_no_comments": {
+    "message": "لم يتم العثور على قسم التعليقات. مرر الصفحة إلى التعليقات أولاً."
+  },
+  "err_no_field": {
+    "message": "لم يتم العثور على حقل التعليق. تأكد من تسجيل الدخول."
+  },
+  "err_no_editor": {
+    "message": "لم يظهر المحرر بعد النقر على الحقل."
+  },
+  "footer_generated": {
+    "message": "مُلخَّص بواسطة Transcript Distiller"
+  }
+}

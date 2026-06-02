@@ -1,0 +1,134 @@
+{
+  "ext_name": {
+    "message": "YouTube Transcript Distiller"
+  },
+  "ext_description": {
+    "message": "YouTubeの文字起こしを取得し、Google Gemini AIで要約します。"
+  },
+  "btn_distiller": {
+    "message": "Transcript Distiller"
+  },
+  "btn_fetching": {
+    "message": "読み込み中…"
+  },
+  "btn_thinking": {
+    "message": "AI思考中…"
+  },
+  "btn_injecting": {
+    "message": "挿入中…"
+  },
+  "btn_done": {
+    "message": "完了 ✓"
+  },
+  "btn_error": {
+    "message": "エラー！"
+  },
+  "modal_title": {
+    "message": "Transcript Distiller – 設定"
+  },
+  "lbl_apikey": {
+    "message": "Gemini APIキー"
+  },
+  "lbl_apikey_link": {
+    "message": "➜ 無料キーを取得"
+  },
+  "btn_show": {
+    "message": "表示"
+  },
+  "btn_hide": {
+    "message": "非表示"
+  },
+  "lbl_prompt": {
+    "message": "プロンプト"
+  },
+  "btn_reset": {
+    "message": "↺ リセット"
+  },
+  "lbl_lang": {
+    "message": "返答言語"
+  },
+  "btn_cancel": {
+    "message": "キャンセル"
+  },
+  "btn_save": {
+    "message": "保存"
+  },
+  "msg_saved": {
+    "message": "保存しました ✓"
+  },
+  "msg_save_error": {
+    "message": "保存に失敗しました！"
+  },
+  "msg_no_key": {
+    "message": "APIキーを入力してください。"
+  },
+  "opt_title": {
+    "message": "YouTube Transcript Distiller – 設定"
+  },
+  "opt_subtitle": {
+    "message": "作成者：Michael Ruck · marsgasse.com"
+  },
+  "opt_apikey_hint": {
+    "message": "無料のAPIキーはこちらから取得できます："
+  },
+  "opt_prompt_hint": {
+    "message": "このプロンプトは文字起こしと一緒にGeminiに送信されます。"
+  },
+  "opt_lang_hint": {
+    "message": "デフォルト：ブラウザの言語。フォールバック：英語。"
+  },
+  "lang_ar": {
+    "message": "アラビア語"
+  },
+  "lang_zh": {
+    "message": "中国語（簡体字）"
+  },
+  "lang_en": {
+    "message": "英語"
+  },
+  "lang_fr": {
+    "message": "フランス語"
+  },
+  "lang_de": {
+    "message": "ドイツ語"
+  },
+  "lang_hi": {
+    "message": "ヒンディー語"
+  },
+  "lang_ja": {
+    "message": "日本語"
+  },
+  "lang_ko": {
+    "message": "韓国語"
+  },
+  "lang_pt": {
+    "message": "ポルトガル語"
+  },
+  "lang_ru": {
+    "message": "ロシア語"
+  },
+  "lang_es": {
+    "message": "スペイン語"
+  },
+  "default_prompt": {
+    "message": "文字起こしの最も重要なポイントをYouTubeコメントとしてまとめてください。\n\n単一の導入語で始めてください（例：「まとめ：」「ポイント：」）-- 完全な文で始めないでください。\n\n書式ルール：\n• 箇条書きには • を使用\n• 特定の数が期待される場合は 1. 2. 3.\n• 各ポイントの後に空行\n• 個々のキーワードのみ *太字* に\n• Markdownなし、HTMLなし、インデントなし"
+  },
+  "err_no_key": {
+    "message": "Gemini APIキーが設定されていません。アドオン設定で入力してください。"
+  },
+  "err_no_transcript": {
+    "message": "文字起こしが利用できません。この動画に字幕がない可能性があります。"
+  },
+  "err_no_comments": {
+    "message": "コメントセクションが見つかりません。まずコメントまでスクロールしてください。"
+  },
+  "err_no_field": {
+    "message": "コメント入力欄が見つかりません。ログインしているか確認してください。"
+  },
+  "err_no_editor": {
+    "message": "プレースホルダーをクリックした後にエディターが表示されませんでした。"
+  },
+  "footer_generated": {
+    "message": "Transcript Distillerで要約"
+  }
+}
