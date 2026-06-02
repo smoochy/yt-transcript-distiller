@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Transcript Distiller</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #18181b;
+      color: #f1f1f1;
+      margin: 0;
+      padding: 32px;
+      min-width: 400px;
+    }
+    h1 { font-size: 20px; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; }
+    .subtitle { font-size: 13px; color: #aaa; margin-bottom: 32px; }
+    .section { background: #27272a; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+    .section h2 { font-size: 14px; font-weight: 600; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 16px 0; }
+    label { display: block; font-size: 14px; margin-bottom: 6px; color: #d4d4d8; }
+    input[type="password"], input[type="text"] {
+      width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b;
+      border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none; transition: border-color 0.2s;
+    }
+    input[type="password"]:focus, input[type="text"]:focus { border-color: #3ea6ff; }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    .input-row input { flex: 1; }
+    .btn-show { background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #d4d4d8; font-size: 12px; padding: 9px 12px; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+    .btn-show:hover { background: #52525b; }
+    .hint { font-size: 12px; color: #71717a; margin-top: 8px; }
+    .hint a { color: #3ea6ff; text-decoration: none; }
+    .hint a:hover { text-decoration: underline; }
+    .prompt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .prompt-header label { margin: 0; }
+    .btn-reset-small { background: none; border: 1px solid #52525b; border-radius: 5px; color: #aaa; font-size: 11px; padding: 3px 8px; cursor: pointer; }
+    textarea { width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #f4f4f5; font-size: 14px; font-family: "Segoe UI", Arial, sans-serif; padding: 9px 12px; outline: none; resize: vertical; transition: border-color 0.2s; line-height: 1.5; }
+    textarea:focus { border-color: #3ea6ff; }
+    select { width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none; cursor: pointer; }
+    select:focus { border-color: #3ea6ff; }
+    .btn-save { background: #3ea6ff; border: none; border-radius: 6px; color: #000; font-size: 14px; font-weight: 600; padding: 10px 24px; cursor: pointer; transition: background 0.2s; }
+    .btn-save:hover { background: #5bb5ff; }
+    .status { display: inline-block; margin-left: 12px; font-size: 13px; color: #4ade80; opacity: 0; transition: opacity 0.3s; }
+    .status.visible { opacity: 1; }
+    .status.error { color: #f87171; }
+    .footer { font-size: 12px; color: #52525b; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <h1>YouTube Transcript Distiller</h1>
+  <div class="subtitle" data-i18n="opt_subtitle"></div>
+
+  <div class="section">
+    <h2 data-i18n="lbl_apikey"></h2>
+    <label for="apiKey" data-i18n="lbl_apikey"></label>
+    <div class="input-row">
+      <input type="password" id="apiKey" placeholder="AIza…" autocomplete="off" spellcheck="false">
+      <button class="btn-show" id="toggleShow" data-i18n="btn_show"></button>
+    </div>
+    <div class="hint">
+      <span data-i18n="opt_apikey_hint"></span>
+      <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 data-i18n="lbl_prompt"></h2>
+    <div class="prompt-header">
+      <label for="distillerPrompt" data-i18n="lbl_prompt"></label>
+      <button class="btn-reset-small" id="resetPrompt" data-i18n="btn_reset"></button>
+    </div>
+    <textarea id="distillerPrompt" rows="6" spellcheck="false"></textarea>
+    <div class="hint" data-i18n="opt_prompt_hint"></div>
+  </div>
+
+  <div class="section">
+    <h2 data-i18n="lbl_lang"></h2>
+    <label for="distillerLang" data-i18n="lbl_lang"></label>
+    <select id="distillerLang"></select>
+    <div class="hint" data-i18n="opt_lang_hint"></div>
+  </div>
+
+  <button class="btn-save" id="saveBtn" data-i18n="btn_save"></button>
+  <span class="status" id="status"></span>
+
+  <div class="footer">Michael Ruck · marsgasse.com</div>
+
+  <script src="options.js"></script>
+</body>
+</html>
