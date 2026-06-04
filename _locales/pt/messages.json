@@ -130,5 +130,17 @@
   },
   "footer_generated": {
     "message": "destilado por Transcript Distiller"
+  },
+  "lbl_telemetry": {
+    "message": "Estatísticas de utilização"
+  },
+  "lbl_telemetry_desc": {
+    "message": "Enviar estatísticas de utilização anónimas para marsgasse.com"
+  },
+  "lbl_telemetry_hint": {
+    "message": "Envia apenas: nome do complemento, ação, definições de idioma e um hash de IP por hora. Sem dados pessoais."
+  },
+  "err_key_invalid": {
+    "message": "⚠ Chave API inválida – por favor, introduza uma nova."
   }
 }

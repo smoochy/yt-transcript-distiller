@@ -130,5 +130,17 @@
   },
   "footer_generated": {
     "message": "сжато с помощью Transcript Distiller"
+  },
+  "lbl_telemetry": {
+    "message": "Статистика использования"
+  },
+  "lbl_telemetry_desc": {
+    "message": "Отправлять анонимную статистику на marsgasse.com"
+  },
+  "lbl_telemetry_hint": {
+    "message": "Отправляется только: название расширения, действие, языковые настройки и почасовой хеш IP. Никаких личных данных."
+  },
+  "err_key_invalid": {
+    "message": "⚠ API-ключ недействителен – введите новый."
   }
 }

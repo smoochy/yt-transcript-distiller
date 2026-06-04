@@ -130,5 +130,17 @@
   },
   "footer_generated": {
     "message": "由 Transcript Distiller 提炼"
+  },
+  "lbl_telemetry": {
+    "message": "使用统计"
+  },
+  "lbl_telemetry_desc": {
+    "message": "向 marsgasse.com 发送匿名使用统计"
+  },
+  "lbl_telemetry_hint": {
+    "message": "仅发送：插件名称、操作、语言设置和每小时IP哈希。无个人数据。"
+  },
+  "err_key_invalid": {
+    "message": "⚠ API 密钥无效 – 请重新输入。"
   }
 }

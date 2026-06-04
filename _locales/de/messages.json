@@ -130,5 +130,17 @@
   },
   "footer_generated": {
     "message": "Eingedampft mit Transcript Distiller"
+  },
+  "lbl_telemetry": {
+    "message": "Nutzungsstatistik"
+  },
+  "lbl_telemetry_desc": {
+    "message": "Anonyme Nutzungsstatistik an marsgasse.com senden"
+  },
+  "lbl_telemetry_hint": {
+    "message": "Übermittelt nur: Add-on-Name, Aktion, Spracheinstellungen und einen stündlichen IP-Hash. Keine personenbezogenen Daten. Jederzeit abschaltbar."
+  },
+  "err_key_invalid": {
+    "message": "⚠ API-Key ungültig – bitte neu eingeben."
   }
 }
