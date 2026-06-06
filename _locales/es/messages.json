@@ -138,7 +138,7 @@
     "message": "Enviar estadísticas de uso anónimas a marsgasse.com"
   },
   "lbl_telemetry_hint": {
-    "message": "Solo envía: nombre del complemento, acción, configuración de idioma y un hash de IP por hora. Sin datos personales."
+    "message": "Enviado solo al hacer clic: nombre del complemento, acción y configuración de idioma. Sin datos personales."
   },
   "err_key_invalid": {
     "message": "⚠ Clave API no válida – por favor, introduce una nueva."

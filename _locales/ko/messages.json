@@ -138,7 +138,7 @@
     "message": "marsgasse.com에 익명 사용 통계 보내기"
   },
   "lbl_telemetry_hint": {
-    "message": "전송되는 정보: 애드온 이름, 작업, 언어 설정, 시간당 IP 해시만. 개인 데이터 없음."
+    "message": "클릭 시에만 전송: 애드온 이름, 작업 및 언어 설정. 개인 데이터 없음."
   },
   "err_key_invalid": {
     "message": "⚠ API 키가 유효하지 않습니다 – 새 키를 입력하세요."

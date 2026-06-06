@@ -138,7 +138,7 @@
     "message": "Envoyer des statistiques d'utilisation anonymes à marsgasse.com"
   },
   "lbl_telemetry_hint": {
-    "message": "Envoie uniquement : nom de l'extension, action, paramètres de langue et un hash IP horaire. Aucune donnée personnelle."
+    "message": "Envoyé uniquement au clic : nom de l'extension, action et paramètres de langue. Aucune donnée personnelle."
   },
   "err_key_invalid": {
     "message": "⚠ Clé API invalide – veuillez en saisir une nouvelle."

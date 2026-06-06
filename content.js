@@ -972,19 +972,21 @@
   }
 
   // --- MAIN DISTILLER LOGIC ---
+  const AMO_LINK = 'addons.mozilla.org/addon/youtube-transcript-distiller';
+
   // --- FOOTER TEXT BY RESPONSE LANGUAGE ---
   const FOOTER_BY_LANG = {
-    'en': 'boiled down by Transcript Distiller',
-    'de': 'Eingedampft mit Transcript Distiller',
-    'fr': 'condensé par Transcript Distiller',
-    'es': 'resumido por Transcript Distiller',
-    'pt': 'destilado por Transcript Distiller',
-    'ru': 'сжато с помощью Transcript Distiller',
-    'ar': 'مُلخَّص بواسطة Transcript Distiller',
-    'zh': '由 Transcript Distiller 提炼',
-    'hi': 'Transcript Distiller द्वारा सारांशित',
-    'ja': 'Transcript Distillerで要約',
-    'ko': 'Transcript Distiller로 요약됨',
+    'en': `boiled down by Transcript Distiller\n${AMO_LINK}`,
+    'de': `Eingedampft mit Transcript Distiller\n${AMO_LINK}`,
+    'fr': `condensé par Transcript Distiller\n${AMO_LINK}`,
+    'es': `resumido por Transcript Distiller\n${AMO_LINK}`,
+    'pt': `destilado por Transcript Distiller\n${AMO_LINK}`,
+    'ru': `сжато с помощью Transcript Distiller\n${AMO_LINK}`,
+    'ar': `مُلخَّص بواسطة Transcript Distiller\n${AMO_LINK}`,
+    'zh': `由 Transcript Distiller 提炼\n${AMO_LINK}`,
+    'hi': `Transcript Distiller द्वारा सारांशित\n${AMO_LINK}`,
+    'ja': `Transcript Distillerで要約\n${AMO_LINK}`,
+    'ko': `Transcript Distiller로 요약됨\n${AMO_LINK}`,
   };
 
   function getFooterForLang(langCode) {

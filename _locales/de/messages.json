@@ -138,7 +138,7 @@
     "message": "Anonyme Nutzungsstatistik an marsgasse.com senden"
   },
   "lbl_telemetry_hint": {
-    "message": "Übermittelt nur: Add-on-Name, Aktion, Spracheinstellungen und einen stündlichen IP-Hash. Keine personenbezogenen Daten. Jederzeit abschaltbar."
+    "message": "Wird nur beim Klick übermittelt: Add-on-Name, Aktion und Spracheinstellungen. Keine persönlichen Daten."
   },
   "err_key_invalid": {
     "message": "⚠ API-Key ungültig – bitte neu eingeben."

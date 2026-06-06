@@ -138,7 +138,7 @@
     "message": "Send anonymous usage statistics to marsgasse.com"
   },
   "lbl_telemetry_hint": {
-    "message": "Only sends: add-on name, action, language settings, and an hourly IP hash. No personal data. You can opt out at any time."
+    "message": "Sent only on button click: add-on name, action and language settings. No personal data."
   },
   "err_key_invalid": {
     "message": "⚠ API key invalid – please enter a new one."
