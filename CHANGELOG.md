@@ -4,6 +4,7 @@
 
 ### Added
 - AMO unlisted signing in `build.yml`: `.xpi` is now Mozilla-signed via `web-ext sign --channel=unlisted` before release, enabling direct Firefox installation without browser workarounds (`AMO_JWT_ISSUER` + `AMO_JWT_SECRET` GitHub secrets required)
+- Extension ID changed to `yt-transcript-distiller-smoochy@github.com` (fork-specific ID; original `@marsgasse.com` ID belongs to upstream author and cannot be signed by this account)
 - Multi-provider AI support: Anthropic/Claude, OpenAI, and OpenRouter alongside Gemini
 - Anthropic provider (`AnthropicProvider`) using Messages API; API key + model selector; model list fetched from [smoochy/openrouter-model-list](https://github.com/smoochy/openrouter-model-list) with 48h `chrome.storage.local` cache; default model `claude-haiku-4-5-20251001`
 - OpenRouter custom model ID field: free-text input validated against OpenRouter `/api/v1/models` on save; takes priority over dropdown; `openrouterCustomModel` override in provider factory
