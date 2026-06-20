@@ -175,10 +175,10 @@
     try {
       const models = await fetchAnthropicModels();
       anthropicModelSelect.innerHTML = "";
-      models.forEach(({ id, name }) => {
+      models.forEach(({ id, display_name }) => {
         const opt = document.createElement("option");
         opt.value = id;
-        opt.textContent = name || id;
+        opt.textContent = display_name || id;
         anthropicModelSelect.appendChild(opt);
       });
       anthropicModelSelect.value = savedModel || (models[0]?.id ?? "claude-haiku-4-5-20251001");
