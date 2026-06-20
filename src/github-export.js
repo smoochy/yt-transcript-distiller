@@ -47,10 +47,8 @@ async function pushFile({ pat, repo, path, content }) {
     throw new Error(`GitHub GET failed: HTTP ${getRes.status}`);
   }
 
-  // UTF-8 safe base64: use TextEncoder when available (browser), Buffer in Node/Jest
-  const encoded = typeof TextEncoder !== 'undefined'
-    ? btoa(String.fromCharCode(...new TextEncoder().encode(content)))
-    : Buffer.from(content, 'utf8').toString('base64');
+  // UTF-8 safe base64: use TextEncoder (always available in modern environments)
+  const encoded = btoa(String.fromCharCode(...new TextEncoder().encode(content)));
 
   const body = { message: `Add ${path.split('/').pop()}`, content: encoded };
   if (sha) body.sha = sha;
