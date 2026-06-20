@@ -29,6 +29,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Sign with AMO (unlisted)
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: |
+          rm -f web-ext-artifacts/*.xpi
+          npx web-ext sign --channel=unlisted \
+            --api-key="$AMO_JWT_ISSUER" \
+            --api-secret="$AMO_JWT_SECRET"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
