@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yt-transcript-distiller-${{ github.sha }}
-          path: web-ext-artifacts/*.zip
+          path: web-ext-artifacts/*.xpi
 
       - name: Check if HEAD already tagged (auto mode only)
         if: github.event_name == 'push'
@@ -63,12 +63,9 @@ jobs:
             N=$(( ${LAST_N:-0} + 1 ))
             TAG="v${UPSTREAM_VERSION}-smoochy-v${N}"
           fi
-          PREV_TAG=$(git tag --sort=-creatordate | grep -E '^v' | head -1)
-          if [ -n "$PREV_TAG" ]; then
-            BODY=$(git log "${PREV_TAG}..HEAD" --oneline --no-decorate)
-          else
-            BODY=$(git log HEAD --oneline --no-decorate)
-          fi
+          VERSION="${TAG#v}"
+          BODY=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## /{exit} found && NF{print}" CHANGELOG.md)
+          if [ -z "$BODY" ]; then BODY="No changelog entry for ${VERSION}."; fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           DELIMITER="EOF_$(openssl rand -hex 8)"
           echo "body<<${DELIMITER}" >> "$GITHUB_OUTPUT"
@@ -91,7 +88,7 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
           name: ${{ steps.tag.outputs.tag }}
-          files: web-ext-artifacts/*.zip
+          files: web-ext-artifacts/*.xpi
           body: ${{ steps.tag.outputs.body }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

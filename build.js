@@ -24,7 +24,7 @@ await esbuild.build({
 });
 
 if (!watch) {
-  execSync('npx web-ext build --overwrite-dest', { stdio: 'inherit' });
+  execSync('npx web-ext build --overwrite-dest --filename "youtube_transcript_distiller-{version}.xpi"', { stdio: 'inherit' });
 }
 
 console.log('Build complete.');
