@@ -125,7 +125,7 @@ ${transcript}` }] }],
 
   // src/providers/index.js
   async function createProvider(settings) {
-    const { provider } = settings;
+    const provider = settings.provider || "gemini";
     if (provider === "gemini") {
       return new GeminiProvider({ apiKey: settings.geminiApiKey });
     }
@@ -151,7 +151,8 @@ ${transcript}` }] }],
   var GITHUB_API = "https://api.github.com";
   async function exportToGitHub({ pat, repo, subfolder, format, videoId, title, url, date, provider, model, summary, transcript }) {
     const errors = [];
-    const folder = subfolder.endsWith("/") ? subfolder : `${subfolder}/`;
+    const subfolder_ = subfolder || "yt-summaries";
+    const folder = subfolder_.endsWith("/") ? subfolder_ : `${subfolder_}/`;
     if (format === "markdown" || format === "both") {
       try {
         await pushFile({
@@ -192,7 +193,10 @@ ${transcript}` }] }],
     } else if (getRes.status !== 404) {
       throw new Error(`GitHub GET failed: HTTP ${getRes.status}`);
     }
-    const encoded = btoa(String.fromCharCode(...new TextEncoder().encode(content)));
+    const bytes = new TextEncoder().encode(content);
+    let binary = "";
+    for (const b of bytes) binary += String.fromCharCode(b);
+    const encoded = btoa(binary);
     const body = { message: `Add ${path.split("/").pop()}`, content: encoded };
     if (sha) body.sha = sha;
     const putRes = await fetch(apiUrl, {
@@ -713,9 +717,9 @@ ${transcript}` }] }],
           }
         });
       }
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
+      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
         try {
-          const storedSettings = await getStoragePromise(chrome.storage.sync);
+          const storedSettings = await getStoragePromise(chrome.storage.local);
           return { ...defaultSettings, ...storedSettings };
         } catch (e) {
           console.warn("YouTube Transcript Copier: Chrome storage error or timeout, falling back to localStorage:", e);
@@ -731,9 +735,9 @@ ${transcript}` }] }],
       }
     }
     function setSettings(settings) {
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
+      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
         try {
-          chrome.storage.sync.set(settings, () => {
+          chrome.storage.local.set(settings, () => {
             if (chrome.runtime.lastError) {
               console.warn("YouTube Transcript Copier: Error setting Chrome storage:", chrome.runtime.lastError);
               try {
@@ -858,7 +862,7 @@ ${transcript}` }] }],
       modal.appendChild(statusDiv);
       overlay.appendChild(modal);
       document.body.appendChild(overlay);
-      chrome.storage.sync.get(["geminiApiKey", "distillerPrompt", "distillerLang", "invalidKey"], (r) => {
+      chrome.storage.local.get(["geminiApiKey", "distillerPrompt", "distillerLang", "invalidKey"], (r) => {
         const hasKey = !!(r.geminiApiKey && r.geminiApiKey.trim());
         const keyInvalid = !!r.invalidKey;
         if (hasKey && !keyInvalid) {
@@ -896,7 +900,7 @@ ${transcript}` }] }],
         const lang = document.getElementById("td-lang").value || detectBrowserLang();
         const status = document.getElementById("td-status");
         if (apiSection.style.display === "none") {
-          chrome.storage.sync.set({ distillerPrompt: prompt, distillerLang: lang }, () => {
+          chrome.storage.local.set({ distillerPrompt: prompt, distillerLang: lang }, () => {
             if (chrome.runtime.lastError) {
               status.style.color = "#f87171";
               status.textContent = chrome.i18n.getMessage("msg_save_error");
@@ -914,7 +918,7 @@ ${transcript}` }] }],
           status.textContent = chrome.i18n.getMessage("msg_no_key");
           return;
         }
-        chrome.storage.sync.set({ geminiApiKey: key, distillerPrompt: prompt, distillerLang: lang, invalidKey: false }, () => {
+        chrome.storage.local.set({ geminiApiKey: key, distillerPrompt: prompt, distillerLang: lang, invalidKey: false }, () => {
           if (chrome.runtime.lastError) {
             status.style.color = "#f87171";
             status.textContent = chrome.i18n.getMessage("msg_save_error");
@@ -989,43 +993,6 @@ ${transcript}` }] }],
         });
       } catch (e) {
       }
-    }
-    async function callGeminiApi(apiKey, prompt, transcriptText) {
-      const model = "gemini-2.5-flash";
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const body = {
-        contents: [{
-          parts: [{
-            text: `${prompt}
-
-${transcriptText}`
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.4,
-          maxOutputTokens: 8192,
-          thinkingConfig: {
-            thinkingBudget: 0
-          }
-        }
-      };
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) {
-        const errBody = await res.json().catch(() => ({}));
-        const msg = errBody?.error?.message || `HTTP ${res.status}`;
-        if (res.status === 401 || res.status === 403) {
-          chrome.storage.sync.set({ invalidKey: true });
-        }
-        throw new Error(`Gemini API Fehler: ${msg}`);
-      }
-      const data = await res.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("Gemini hat keine verwertbare Antwort zur\xFCckgegeben.");
-      return text.trim();
     }
     const AMO_LINK = "addons.mozilla.org/addon/youtube-transcript-distiller";
     const FOOTER_BY_LANG = {
@@ -1128,7 +1095,7 @@ ${getFooterForLang(langCode)}`;
           copyButton.textContent = chrome.i18n.getMessage("btn_injecting");
           await injectTextIntoCommentField(finalText);
         }
-        chrome.storage.sync.get(["telemetryEnabled"], (r) => {
+        chrome.storage.local.get(["telemetryEnabled"], (r) => {
           if (r.telemetryEnabled !== false) {
             pingStats(langCode, navigator.language || "unknown", chrome.i18n.getUILanguage() || "unknown");
           }
