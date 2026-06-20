@@ -1,4 +1,226 @@
 (() => {
+  // src/providers/base.js
+  var BaseProvider = class {
+    async summarize(transcript, prompt, options = {}) {
+      throw new Error("Not implemented");
+    }
+  };
+
+  // src/providers/gemini.js
+  var GeminiProvider = class extends BaseProvider {
+    constructor({ apiKey }) {
+      super();
+      this.apiKey = apiKey;
+    }
+    async summarize(transcript, prompt, options = {}) {
+      const model = "gemini-2.5-flash";
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+      const body = {
+        contents: [{ parts: [{ text: `${prompt}
+
+${transcript}` }] }],
+        generationConfig: {
+          temperature: 0.4,
+          maxOutputTokens: 8192,
+          thinkingConfig: { thinkingBudget: 0 }
+        }
+      };
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const msg = err?.error?.message || `HTTP ${res.status}`;
+        if (res.status === 401 || res.status === 403) {
+          chrome.storage.local.set({ invalidKey: true });
+        }
+        throw new Error(`Gemini API error: ${msg}`);
+      }
+      const data = await res.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error("Gemini returned no usable response.");
+      return text.trim();
+    }
+  };
+
+  // src/providers/openai-compat.js
+  var BASE_URLS = {
+    openai: "https://api.openai.com/v1",
+    openrouter: "https://openrouter.ai/api/v1"
+  };
+  var OpenAICompatProvider = class extends BaseProvider {
+    constructor({ apiKey, model, providerType }) {
+      super();
+      this.apiKey = apiKey;
+      this.model = model;
+      this.providerType = providerType;
+      this.baseUrl = BASE_URLS[providerType] ?? BASE_URLS.openai;
+    }
+    async summarize(transcript, prompt, options = {}) {
+      const res = await fetch(`${this.baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: [
+            { role: "system", content: prompt },
+            { role: "user", content: transcript }
+          ],
+          temperature: 0.4,
+          max_tokens: 8192
+        })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const msg = err?.error?.message || `HTTP ${res.status}`;
+        throw new Error(`${this.providerType} API error: ${msg}`);
+      }
+      const data = await res.json();
+      const text = data?.choices?.[0]?.message?.content;
+      if (!text) throw new Error(`${this.providerType} returned no usable response.`);
+      return text.trim();
+    }
+  };
+
+  // src/model-list.js
+  var CACHE_KEY = "modelListCache";
+  var CACHE_TTL_MS = 60 * 60 * 1e3;
+  async function resolveModel(modelField) {
+    if (!modelField || !modelField.startsWith("http")) {
+      return { id: modelField };
+    }
+    const cached = await getCached(modelField);
+    if (cached) return cached;
+    return fetchAndCache(modelField);
+  }
+  async function fetchAndCache(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`model-list fetch failed: HTTP ${res.status}`);
+    const data = await res.json();
+    if (!Array.isArray(data?.models) || data.models.length === 0) {
+      throw new Error("model-list: invalid format \u2014 expected { models: [{id, score, ...}] }");
+    }
+    const top = data.models[0];
+    if (typeof top.id !== "string" || typeof top.score !== "number") {
+      throw new Error("model-list: each model must have id (string) and score (number)");
+    }
+    const result = { id: top.id, score: top.score, context_length: top.context_length ?? null };
+    await chrome.storage.local.set({
+      [CACHE_KEY]: { url, result, cachedAt: Date.now() }
+    });
+    return result;
+  }
+  async function getCached(url) {
+    const stored = await chrome.storage.local.get([CACHE_KEY]);
+    const entry = stored[CACHE_KEY];
+    if (!entry || entry.url !== url) return null;
+    if (Date.now() - entry.cachedAt > CACHE_TTL_MS) return null;
+    return entry.result;
+  }
+
+  // src/providers/index.js
+  async function createProvider(settings) {
+    const { provider } = settings;
+    if (provider === "gemini") {
+      return new GeminiProvider({ apiKey: settings.geminiApiKey });
+    }
+    if (provider === "openai") {
+      return new OpenAICompatProvider({
+        apiKey: settings.openaiApiKey,
+        model: settings.openaiModel || "gpt-4o-mini",
+        providerType: "openai"
+      });
+    }
+    if (provider === "openrouter") {
+      const resolved = await resolveModel(settings.openrouterModel);
+      return new OpenAICompatProvider({
+        apiKey: settings.openrouterApiKey,
+        model: resolved.id,
+        providerType: "openrouter"
+      });
+    }
+    throw new Error(`Unknown provider: ${provider}`);
+  }
+
+  // src/github-export.js
+  var GITHUB_API = "https://api.github.com";
+  async function exportToGitHub({ pat, repo, subfolder, format, videoId, title, url, date, provider, model, summary, transcript }) {
+    const errors = [];
+    const folder = subfolder.endsWith("/") ? subfolder : `${subfolder}/`;
+    if (format === "markdown" || format === "both") {
+      try {
+        await pushFile({
+          pat,
+          repo,
+          path: `${folder}${videoId}_${date}.md`,
+          content: buildMarkdown({ title, url, date, provider, model, summary, transcript })
+        });
+      } catch (e) {
+        errors.push(`MD: ${e.message}`);
+      }
+    }
+    if (format === "json" || format === "both") {
+      try {
+        await pushFile({
+          pat,
+          repo,
+          path: `${folder}${videoId}_${date}.json`,
+          content: JSON.stringify({ video_id: videoId, title, url, date, provider, model, summary, transcript }, null, 2)
+        });
+      } catch (e) {
+        errors.push(`JSON: ${e.message}`);
+      }
+    }
+    if (errors.length > 0) throw new Error(errors.join("; "));
+  }
+  async function pushFile({ pat, repo, path, content }) {
+    const apiUrl = `${GITHUB_API}/repos/${repo}/contents/${path}`;
+    const headers = {
+      Authorization: `Bearer ${pat}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    const getRes = await fetch(apiUrl, { headers });
+    let sha;
+    if (getRes.ok) {
+      sha = (await getRes.json()).sha;
+    } else if (getRes.status !== 404) {
+      throw new Error(`GitHub GET failed: HTTP ${getRes.status}`);
+    }
+    const encoded = btoa(String.fromCharCode(...new TextEncoder().encode(content)));
+    const body = { message: `Add ${path.split("/").pop()}`, content: encoded };
+    if (sha) body.sha = sha;
+    const putRes = await fetch(apiUrl, {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!putRes.ok) {
+      const err = await putRes.json().catch(() => ({}));
+      throw new Error(err?.message || `GitHub PUT failed: HTTP ${putRes.status}`);
+    }
+  }
+  function buildMarkdown({ title, url, date, provider, model, summary, transcript }) {
+    return [
+      `# ${title}`,
+      `**URL:** ${url}`,
+      `**Datum:** ${date}`,
+      `**Modell:** ${provider}/${model}`,
+      "",
+      "## Zusammenfassung",
+      summary,
+      "",
+      "## Transkript",
+      transcript,
+      ""
+    ].join("\n");
+  }
+
   // src/content.js
   (function() {
     if (window.hasTranscriptCopier) {
@@ -31,6 +253,39 @@
       useParagraphs: false,
       theme: "dark"
     };
+    async function loadProviderSettings() {
+      return new Promise((resolve) => {
+        chrome.storage.local.get([
+          "provider",
+          "geminiApiKey",
+          "openaiApiKey",
+          "openaiModel",
+          "openrouterApiKey",
+          "openrouterModel",
+          "distillerPrompt",
+          "distillerLang",
+          "postComment",
+          "showInPopup",
+          "githubExportEnabled",
+          "githubPat",
+          "githubRepo",
+          "githubSubfolder",
+          "githubFormat"
+        ], resolve);
+      });
+    }
+    async function migrateSettingsIfNeeded() {
+      const local = await chrome.storage.local.get(["provider"]);
+      if (local.provider) return;
+      const sync = await new Promise((r) => chrome.storage.sync.get(["geminiApiKey", "distillerPrompt", "distillerLang"], r));
+      if (!sync.geminiApiKey) return;
+      await chrome.storage.local.set({
+        provider: "gemini",
+        geminiApiKey: sync.geminiApiKey,
+        distillerPrompt: sync.distillerPrompt ?? "",
+        distillerLang: sync.distillerLang ?? detectBrowserLang()
+      });
+    }
     let observer = null;
     let retryCount = 0;
     const MAX_RETRIES = 5;
@@ -824,25 +1079,17 @@ ${AMO_LINK}`
       copyButton.disabled = true;
       let langCode = "en";
       try {
+        await migrateSettingsIfNeeded();
         copyButton.textContent = chrome.i18n.getMessage("btn_fetching");
-        const settings = await getSettings();
-        const apiKey = await new Promise((resolve) => {
-          chrome.storage.sync.get(["geminiApiKey"], (r) => resolve(r.geminiApiKey || ""));
-        });
-        if (!apiKey) {
-          throw new Error(chrome.i18n.getMessage("err_no_key"));
-        }
-        const userPrompt = await new Promise((resolve) => {
-          chrome.storage.sync.get(["distillerPrompt", "distillerLang"], (r) => {
-            const prompt = r.distillerPrompt || DEFAULT_DISTILLER_PROMPT;
-            langCode = r.distillerLang || detectBrowserLang();
-            const langEntry = LANGUAGES.find((l) => l.code === langCode);
-            const langName = langEntry ? langEntry.label.split(" \u2014 ")[0].trim() : "English";
-            resolve(`${prompt}
+        const providerSettings = await loadProviderSettings();
+        const lang = providerSettings.distillerLang || detectBrowserLang();
+        langCode = lang;
+        const langEntry = LANGUAGES.find((l) => l.code === lang);
+        const langName = langEntry ? langEntry.label.split(" \u2014 ")[0].trim() : "English";
+        const prompt = providerSettings.distillerPrompt || DEFAULT_DISTILLER_PROMPT;
+        const userPrompt = `${prompt}
 
-Respond exclusively in ${langName}.`);
-          });
-        });
+Respond exclusively in ${langName}.`;
         copyButton.textContent = chrome.i18n.getMessage("btn_fetching");
         const transcriptObj = await getTranscriptDict(window.location.href);
         if (!transcriptObj || !transcriptObj.transcript.length) {
@@ -850,12 +1097,37 @@ Respond exclusively in ${langName}.`);
         }
         const transcriptText = transcriptObj.transcript.map(([, text]) => text).join(" ");
         copyButton.textContent = chrome.i18n.getMessage("btn_thinking");
-        const summary = await callGeminiApi(apiKey, userPrompt, transcriptText);
+        const provider = await createProvider(providerSettings);
+        const summary = await provider.summarize(transcriptText, userPrompt);
         const finalText = `${summary}
 
 ${getFooterForLang(langCode)}`;
-        copyButton.textContent = chrome.i18n.getMessage("btn_injecting");
-        await injectTextIntoCommentField(finalText);
+        if (providerSettings.githubExportEnabled && providerSettings.githubPat && providerSettings.githubRepo) {
+          const videoId = new URL(window.location.href).searchParams.get("v") ?? "unknown";
+          const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+          exportToGitHub({
+            pat: providerSettings.githubPat,
+            repo: providerSettings.githubRepo,
+            subfolder: providerSettings.githubSubfolder || "",
+            format: providerSettings.githubFormat || "markdown",
+            videoId,
+            title: document.title.replace(" - YouTube", "").trim(),
+            url: window.location.href,
+            date,
+            provider: providerSettings.provider || "gemini",
+            model: providerSettings.openrouterModel || providerSettings.openaiModel || "gemini-2.5-flash",
+            summary,
+            transcript: transcriptText
+          }).catch((err) => {
+            console.error("GitHub export failed:", err);
+            const btn = document.getElementById(randomCopyBtnId);
+            if (btn) btn.title = `GitHub export failed: ${err.message}`;
+          });
+        }
+        if (providerSettings.postComment !== false) {
+          copyButton.textContent = chrome.i18n.getMessage("btn_injecting");
+          await injectTextIntoCommentField(finalText);
+        }
         chrome.storage.sync.get(["telemetryEnabled"], (r) => {
           if (r.telemetryEnabled !== false) {
             pingStats(langCode, navigator.language || "unknown", chrome.i18n.getUILanguage() || "unknown");

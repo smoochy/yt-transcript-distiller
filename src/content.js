@@ -1,3 +1,6 @@
+import { createProvider } from './providers/index.js';
+import { exportToGitHub } from './github-export.js';
+
 // --- SCRIPT INITIALIZATION AND GUARDS ---
 // This ensures the script doesn't run multiple times on a single page,
 // which can happen with YouTube's dynamic navigation.
@@ -41,6 +44,32 @@
     useParagraphs: false,
     theme: 'dark',
   };
+
+  // --- PROVIDER SETTINGS LOADER ---
+  async function loadProviderSettings() {
+    return new Promise(resolve => {
+      chrome.storage.local.get([
+        'provider', 'geminiApiKey', 'openaiApiKey', 'openaiModel',
+        'openrouterApiKey', 'openrouterModel',
+        'distillerPrompt', 'distillerLang',
+        'postComment', 'showInPopup',
+        'githubExportEnabled', 'githubPat', 'githubRepo', 'githubSubfolder', 'githubFormat',
+      ], resolve);
+    });
+  }
+
+  async function migrateSettingsIfNeeded() {
+    const local = await chrome.storage.local.get(['provider']);
+    if (local.provider) return;
+    const sync = await new Promise(r => chrome.storage.sync.get(['geminiApiKey', 'distillerPrompt', 'distillerLang'], r));
+    if (!sync.geminiApiKey) return;
+    await chrome.storage.local.set({
+      provider: 'gemini',
+      geminiApiKey: sync.geminiApiKey,
+      distillerPrompt: sync.distillerPrompt ?? '',
+      distillerLang: sync.distillerLang ?? detectBrowserLang(),
+    });
+  }
 
   // --- ROBUSTNESS VARIABLES ---
   let observer = null;
@@ -1024,49 +1053,70 @@
     let langCode = 'en';
 
     try {
-      // 1. Einstellungen + API-Key laden
+      // 1. Migrate legacy sync settings on first run
+      await migrateSettingsIfNeeded();
+
+      // 2. Load provider settings from local storage
       copyButton.textContent = chrome.i18n.getMessage('btn_fetching');
-      const settings = await getSettings();
+      const providerSettings = await loadProviderSettings();
 
-      const apiKey = await new Promise((resolve) => {
-        chrome.storage.sync.get(['geminiApiKey'], (r) => resolve(r.geminiApiKey || ''));
-      });
-      if (!apiKey) {
-        throw new Error(chrome.i18n.getMessage('err_no_key'));
-      }
+      // Build prompt with language instruction (same logic as upstream)
+      const lang = providerSettings.distillerLang || detectBrowserLang();
+      langCode = lang;
+      const langEntry = LANGUAGES.find(l => l.code === lang);
+      const langName = langEntry ? langEntry.label.split(' — ')[0].trim() : 'English';
+      const prompt = providerSettings.distillerPrompt || DEFAULT_DISTILLER_PROMPT;
+      const userPrompt = `${prompt}\n\nRespond exclusively in ${langName}.`;
 
-      const userPrompt = await new Promise((resolve) => {
-        chrome.storage.sync.get(['distillerPrompt', 'distillerLang'], (r) => {
-          const prompt = r.distillerPrompt || DEFAULT_DISTILLER_PROMPT;
-          langCode = r.distillerLang || detectBrowserLang();
-          const langEntry = LANGUAGES.find(l => l.code === langCode);
-          const langName = langEntry ? langEntry.label.split(' — ')[0].trim() : 'English';
-          resolve(`${prompt}\n\nRespond exclusively in ${langName}.`);
-        });
-      });
-
-      // 2. Transkript holen
+      // 3. Transkript holen
       copyButton.textContent = chrome.i18n.getMessage('btn_fetching');
       const transcriptObj = await getTranscriptDict(window.location.href);
       if (!transcriptObj || !transcriptObj.transcript.length) {
         throw new Error(chrome.i18n.getMessage('err_no_transcript'));
       }
 
-      // 3. Transkript formatieren
+      // 4. Transkript formatieren
       const transcriptText = transcriptObj.transcript
         .map(([, text]) => text)
         .join(' ');
 
-      // 4. Gemini aufrufen
+      // 5. Summarize with selected provider
       copyButton.textContent = chrome.i18n.getMessage('btn_thinking');
-      const summary = await callGeminiApi(apiKey, userPrompt, transcriptText);
+      const provider = await createProvider(providerSettings);
+      const summary = await provider.summarize(transcriptText, userPrompt);
 
       // Footer in der gewählten Antwortsprache
       const finalText = `${summary}\n\n${getFooterForLang(langCode)}`;
 
-      // 5. Ins Kommentarfeld injizieren
-      copyButton.textContent = chrome.i18n.getMessage('btn_injecting');
-      await injectTextIntoCommentField(finalText);
+      // 6a. GitHub export (non-blocking, errors shown as button title)
+      if (providerSettings.githubExportEnabled && providerSettings.githubPat && providerSettings.githubRepo) {
+        const videoId = new URL(window.location.href).searchParams.get('v') ?? 'unknown';
+        const date = new Date().toISOString().split('T')[0];
+        exportToGitHub({
+          pat: providerSettings.githubPat,
+          repo: providerSettings.githubRepo,
+          subfolder: providerSettings.githubSubfolder || '',
+          format: providerSettings.githubFormat || 'markdown',
+          videoId,
+          title: document.title.replace(' - YouTube', '').trim(),
+          url: window.location.href,
+          date,
+          provider: providerSettings.provider || 'gemini',
+          model: providerSettings.openrouterModel || providerSettings.openaiModel || 'gemini-2.5-flash',
+          summary,
+          transcript: transcriptText,
+        }).catch(err => {
+          console.error('GitHub export failed:', err);
+          const btn = document.getElementById(randomCopyBtnId);
+          if (btn) btn.title = `GitHub export failed: ${err.message}`;
+        });
+      }
+
+      // 6b. Post comment (conditional on postComment setting)
+      if (providerSettings.postComment !== false) {
+        copyButton.textContent = chrome.i18n.getMessage('btn_injecting');
+        await injectTextIntoCommentField(finalText);
+      }
 
       // Statistik-Ping nur wenn Telemetrie aktiviert (default: an)
       chrome.storage.sync.get(['telemetryEnabled'], (r) => {

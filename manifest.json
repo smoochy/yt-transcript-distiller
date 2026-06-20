@@ -9,9 +9,16 @@
   "permissions": [
     "storage",
     "clipboardWrite",
-    "clipboardRead",
+    "clipboardRead"
+  ],
+
+  "host_permissions": [
     "https://www.youtube.com/*",
     "https://generativelanguage.googleapis.com/*",
+    "https://api.openai.com/*",
+    "https://openrouter.ai/*",
+    "https://api.github.com/*",
+    "https://raw.githubusercontent.com/*",
     "https://marsgasse.com/*"
   ],
 
