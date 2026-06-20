@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube Transcript Distiller</title>
+  <title data-i18n="opt_title">Transcript Distiller – Settings</title>
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -11,37 +11,94 @@
       color: #f1f1f1;
       margin: 0;
       padding: 32px;
-      min-width: 400px;
+      min-width: 480px;
+      max-width: 600px;
     }
     h1 { font-size: 20px; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; }
-    .subtitle { font-size: 13px; color: #aaa; margin-bottom: 32px; }
-    .section { background: #27272a; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
-    .section h2 { font-size: 14px; font-weight: 600; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 16px 0; }
-    label { display: block; font-size: 14px; margin-bottom: 6px; color: #d4d4d8; }
+    .subtitle { font-size: 13px; color: #aaa; margin-bottom: 24px; }
+    label { display: block; font-size: 14px; margin-bottom: 6px; margin-top: 14px; color: #d4d4d8; }
+    label:first-child { margin-top: 0; }
     input[type="password"], input[type="text"] {
       width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b;
-      border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none; transition: border-color 0.2s;
+      border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none;
+      transition: border-color 0.2s;
     }
     input[type="password"]:focus, input[type="text"]:focus { border-color: #3ea6ff; }
-    .input-row { display: flex; gap: 8px; align-items: center; }
-    .input-row input { flex: 1; }
-    .btn-show { background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #d4d4d8; font-size: 12px; padding: 9px 12px; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
-    .btn-show:hover { background: #52525b; }
+    textarea {
+      width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b;
+      border-radius: 6px; color: #f4f4f5; font-size: 14px; font-family: "Segoe UI", Arial, sans-serif;
+      padding: 9px 12px; outline: none; resize: vertical; transition: border-color 0.2s; line-height: 1.5;
+    }
+    textarea:focus { border-color: #3ea6ff; }
+    select {
+      width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b;
+      border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none; cursor: pointer;
+    }
+    select:focus { border-color: #3ea6ff; }
+    .btn-save {
+      background: #3ea6ff; border: none; border-radius: 6px; color: #000; font-size: 14px;
+      font-weight: 600; padding: 10px 24px; cursor: pointer; transition: background 0.2s; margin-top: 20px;
+    }
+    .btn-save:hover { background: #5bb5ff; }
+    .status {
+      display: inline-block; margin-left: 12px; font-size: 13px; color: #4ade80;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .status.visible { opacity: 1; }
+    .status.error { color: #f87171; }
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+    .tab-btn {
+      padding: 6px 14px; border: 1px solid #555; background: #2a2a2a; color: #ccc;
+      cursor: pointer; border-radius: 4px; font-size: 13px; transition: background 0.15s;
+    }
+    .tab-btn:hover { background: #3a3a3a; }
+    .tab-btn.active { background: #4a9eff; color: #fff; border-color: #4a9eff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    /* Provider sections */
+    .provider-section { display: none; }
+    .provider-section.active { display: block; }
+    /* Section card */
+    .section {
+      background: #27272a; border-radius: 10px; padding: 20px 24px; margin-bottom: 16px;
+    }
+    .section h2 {
+      font-size: 13px; font-weight: 600; color: #a1a1aa; text-transform: uppercase;
+      letter-spacing: 0.05em; margin: 0 0 14px 0;
+    }
+    /* Model status */
+    .model-status {
+      margin-top: 8px; font-size: 0.85em; color: #aaa; background: #1a1a2e;
+      padding: 8px; border-radius: 4px;
+    }
+    /* Help / hint text */
+    .help-text { font-size: 0.8em; color: #888; margin-top: 4px; }
+    .help-text a { color: #4a9eff; text-decoration: none; }
+    .help-text a:hover { text-decoration: underline; }
     .hint { font-size: 12px; color: #71717a; margin-top: 8px; }
     .hint a { color: #3ea6ff; text-decoration: none; }
     .hint a:hover { text-decoration: underline; }
+    /* Prompt header */
     .prompt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .prompt-header label { margin: 0; }
-    .btn-reset-small { background: none; border: 1px solid #52525b; border-radius: 5px; color: #aaa; font-size: 11px; padding: 3px 8px; cursor: pointer; }
-    textarea { width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #f4f4f5; font-size: 14px; font-family: "Segoe UI", Arial, sans-serif; padding: 9px 12px; outline: none; resize: vertical; transition: border-color 0.2s; line-height: 1.5; }
-    textarea:focus { border-color: #3ea6ff; }
-    select { width: 100%; box-sizing: border-box; background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #f4f4f5; font-size: 14px; padding: 9px 12px; outline: none; cursor: pointer; }
-    select:focus { border-color: #3ea6ff; }
-    .btn-save { background: #3ea6ff; border: none; border-radius: 6px; color: #000; font-size: 14px; font-weight: 600; padding: 10px 24px; cursor: pointer; transition: background 0.2s; }
-    .btn-save:hover { background: #5bb5ff; }
-    .status { display: inline-block; margin-left: 12px; font-size: 13px; color: #4ade80; opacity: 0; transition: opacity 0.3s; }
-    .status.visible { opacity: 1; }
-    .status.error { color: #f87171; }
+    .btn-reset-small {
+      background: none; border: 1px solid #52525b; border-radius: 5px;
+      color: #aaa; font-size: 11px; padding: 3px 8px; cursor: pointer;
+    }
+    .btn-reload {
+      background: #3f3f46; border: 1px solid #52525b; border-radius: 6px; color: #d4d4d8;
+      font-size: 12px; padding: 6px 12px; cursor: pointer; margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-reload:hover { background: #52525b; }
+    /* Checkbox labels */
+    .checkbox-label {
+      display: flex; align-items: flex-start; gap: 10px; font-size: 14px;
+      color: #d4d4d8; cursor: pointer; margin-top: 12px;
+    }
+    .checkbox-label:first-child { margin-top: 0; }
+    .checkbox-label input[type="checkbox"] { margin-top: 2px; cursor: pointer; flex-shrink: 0; }
     .footer { font-size: 12px; color: #52525b; margin-top: 24px; }
   </style>
 </head>
@@ -49,48 +106,140 @@
   <h1>YouTube Transcript Distiller</h1>
   <div class="subtitle" data-i18n="opt_subtitle"></div>
 
-  <div class="section">
-    <h2 data-i18n="lbl_apikey"></h2>
-    <label for="apiKey" data-i18n="lbl_apikey"></label>
-    <div class="input-row">
-      <input type="password" id="apiKey" placeholder="AIza…" autocomplete="off" spellcheck="false">
-      <button class="btn-show" id="toggleShow" data-i18n="btn_show"></button>
-    </div>
-    <div class="hint">
-      <span data-i18n="opt_apikey_hint"></span>
-      <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
-    </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="provider">KI-Anbieter</button>
+    <button class="tab-btn" data-tab="behavior">Verhalten</button>
+    <button class="tab-btn" data-tab="github">GitHub Export</button>
   </div>
 
-  <div class="section">
-    <h2 data-i18n="lbl_prompt"></h2>
-    <div class="prompt-header">
-      <label for="distillerPrompt" data-i18n="lbl_prompt"></label>
-      <button class="btn-reset-small" id="resetPrompt" data-i18n="btn_reset"></button>
+  <!-- ===== Tab: KI-Anbieter ===== -->
+  <div class="tab-panel active" id="tab-provider">
+
+    <div class="section">
+      <h2>Provider</h2>
+      <label for="providerSelect">AI Provider</label>
+      <select id="providerSelect">
+        <option value="gemini">Gemini</option>
+        <option value="openai">OpenAI</option>
+        <option value="openrouter">OpenRouter</option>
+      </select>
     </div>
-    <textarea id="distillerPrompt" rows="6" spellcheck="false"></textarea>
-    <div class="hint" data-i18n="opt_prompt_hint"></div>
-  </div>
 
-  <div class="section">
-    <h2 data-i18n="lbl_lang"></h2>
-    <label for="distillerLang" data-i18n="lbl_lang"></label>
-    <select id="distillerLang"></select>
-    <div class="hint" data-i18n="opt_lang_hint"></div>
-  </div>
-
-  <div class="section">
-    <h2 data-i18n="lbl_telemetry"></h2>
-    <div style="display:flex; align-items:flex-start; gap:10px;">
-      <input type="checkbox" id="telemetryEnabled" style="margin-top:3px; cursor:pointer;">
-      <div>
-        <label for="telemetryEnabled" style="cursor:pointer;" data-i18n="lbl_telemetry_desc"></label>
-        <div class="hint" data-i18n="lbl_telemetry_hint"></div>
+    <!-- Gemini section -->
+    <div class="section provider-section" id="section-gemini">
+      <h2>Gemini</h2>
+      <label for="geminiApiKey">API Key</label>
+      <input type="password" id="geminiApiKey" placeholder="AIza…" autocomplete="off" spellcheck="false">
+      <div class="hint">
+        <span>Get a free key at</span>
+        <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
       </div>
     </div>
-  </div>
 
-  <button class="btn-save" id="saveBtn" data-i18n="btn_save"></button>
+    <!-- OpenAI section -->
+    <div class="section provider-section" id="section-openai">
+      <h2>OpenAI</h2>
+      <label for="openaiApiKey">API Key</label>
+      <input type="password" id="openaiApiKey" placeholder="sk-…" autocomplete="off" spellcheck="false">
+      <label for="openaiModel">Model</label>
+      <input type="text" id="openaiModel" placeholder="gpt-4o-mini">
+    </div>
+
+    <!-- OpenRouter section -->
+    <div class="section provider-section" id="section-openrouter">
+      <h2>OpenRouter</h2>
+      <label for="openrouterApiKey">API Key</label>
+      <input type="password" id="openrouterApiKey" placeholder="sk-or-v1-…" autocomplete="off" spellcheck="false">
+      <label for="openrouterModel">Model or Model List URL</label>
+      <input type="text" id="openrouterModel"
+             placeholder="openrouter/auto  or  https://…/models.json">
+      <div class="help-text">
+        Enter a model name or a URL to a compatible models.json.<br>
+        Example list:
+        <a href="https://github.com/smoochy/openrouter-model-list" target="_blank">smoochy/openrouter-model-list</a>
+        (use <code>models-yt-summarizer.json</code> for YouTube summarization).
+      </div>
+      <div class="model-status" id="modelStatus" style="display:none"></div>
+      <button class="btn-reload" id="reloadModelBtn">&#x1F504; Reload model list</button>
+    </div>
+
+    <!-- Prompt -->
+    <div class="section">
+      <div class="prompt-header">
+        <label for="distillerPrompt" data-i18n="lbl_prompt">Prompt</label>
+        <button class="btn-reset-small" id="resetPrompt" data-i18n="btn_reset">↺ Reset</button>
+      </div>
+      <textarea id="distillerPrompt" rows="6" spellcheck="false"></textarea>
+      <div class="hint" data-i18n="opt_prompt_hint"></div>
+    </div>
+
+    <!-- Language -->
+    <div class="section">
+      <h2 data-i18n="lbl_lang">Response language</h2>
+      <label for="distillerLang" data-i18n="lbl_lang">Response language</label>
+      <select id="distillerLang"></select>
+      <div class="hint" data-i18n="opt_lang_hint"></div>
+    </div>
+
+  </div><!-- /tab-provider -->
+
+  <!-- ===== Tab: Verhalten ===== -->
+  <div class="tab-panel" id="tab-behavior">
+
+    <div class="section">
+      <h2>Verhalten</h2>
+      <label class="checkbox-label">
+        <input type="checkbox" id="postComment" checked>
+        <span>Zusammenfassung als Kommentar posten</span>
+      </label>
+      <label class="checkbox-label">
+        <input type="checkbox" id="showInPopup" checked>
+        <span>Zusammenfassung im Popup anzeigen</span>
+      </label>
+    </div>
+
+  </div><!-- /tab-behavior -->
+
+  <!-- ===== Tab: GitHub Export ===== -->
+  <div class="tab-panel" id="tab-github">
+
+    <div class="section">
+      <h2>GitHub Export</h2>
+      <label class="checkbox-label">
+        <input type="checkbox" id="githubExportEnabled">
+        <span>GitHub Export aktivieren</span>
+      </label>
+    </div>
+
+    <div id="githubFields" style="display:none">
+      <div class="section">
+        <h2>Zugangsdaten</h2>
+        <label for="githubPat">Personal Access Token (PAT)</label>
+        <input type="password" id="githubPat" autocomplete="off" spellcheck="false">
+        <div class="hint">
+          Benötigt Fine-grained PAT mit <strong>Contents: Read &amp; Write</strong> für das Ziel-Repo.<br>
+          Erstellen: github.com/settings/tokens → Fine-grained tokens →
+          Repository access → [dein Repo] → Permissions → Contents: Read &amp; Write
+        </div>
+
+        <label for="githubRepo">Repo (owner/repo)</label>
+        <input type="text" id="githubRepo" placeholder="smoochy/yt-notes">
+
+        <label for="githubSubfolder">Unterordner</label>
+        <input type="text" id="githubSubfolder" placeholder="yt-summaries">
+
+        <label for="githubFormat">Format</label>
+        <select id="githubFormat">
+          <option value="markdown">Markdown</option>
+          <option value="json">JSON</option>
+          <option value="both">Beide (Markdown + JSON)</option>
+        </select>
+      </div>
+    </div>
+
+  </div><!-- /tab-github -->
+
+  <button class="btn-save" id="saveBtn" data-i18n="btn_save">Save</button>
   <span class="status" id="status"></span>
 
   <div class="footer">Michael Ruck · marsgasse.com</div>
