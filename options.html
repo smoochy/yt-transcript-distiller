@@ -122,6 +122,7 @@
         <option value="gemini">Gemini</option>
         <option value="openai">OpenAI</option>
         <option value="openrouter">OpenRouter</option>
+        <option value="anthropic">Anthropic</option>
       </select>
     </div>
 
@@ -161,6 +162,16 @@
       </div>
       <div class="model-status" id="modelStatus" style="display:none"></div>
       <button class="btn-reload" id="reloadModelBtn">&#x1F504; Reload model list</button>
+    </div>
+
+    <!-- Anthropic section -->
+    <div class="section provider-section" id="section-anthropic">
+      <h2>Anthropic</h2>
+      <label for="anthropicApiKey">API Key</label>
+      <input type="password" id="anthropicApiKey" placeholder="sk-ant-…" autocomplete="off" spellcheck="false">
+      <label for="anthropicModel">Model</label>
+      <select id="anthropicModel"></select>
+      <div class="hint">Models fetched from <a href="https://github.com/smoochy/openrouter-model-list" target="_blank">smoochy/openrouter-model-list</a> · refreshed every 48h</div>
     </div>
 
     <!-- Prompt -->

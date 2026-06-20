@@ -13,6 +13,7 @@
 - `fetchAnthropicModels()` with 48h cache in `chrome.storage.local` fetching from openrouter-model-list repo
 - OpenRouter `openrouterCustomModel` override support in provider factory
 - `https://api.anthropic.com/*` added to manifest permissions
+- Anthropic section in options UI: API key field + model dropdown populated from `fetchAnthropicModels()` with error fallback; `anthropicApiKey` and `anthropicModel` saved to `chrome.storage.local`
 
 ### Changed
 - All settings now stored in chrome.storage.local (migrated from sync on first run)

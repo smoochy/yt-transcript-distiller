@@ -1,4 +1,5 @@
 import { resolveModel, clearModelCache } from '../model-list.js';
+import { fetchAnthropicModels } from '../anthropic-model-list.js';
 
 // ─── Migration from legacy chrome.storage.sync ────────────────────────────────
 async function migrateFromSync() {
@@ -105,6 +106,29 @@ document.getElementById('resetPrompt').addEventListener('click', () => {
   document.getElementById('distillerPrompt').value = DEFAULT_PROMPT;
 });
 
+// ─── Anthropic model dropdown ──────────────────────────────────────────────────
+const anthropicModelSelect = document.getElementById('anthropicModel');
+
+async function populateAnthropicModels(savedModel) {
+  try {
+    const models = await fetchAnthropicModels();
+    anthropicModelSelect.innerHTML = '';
+    models.forEach(({ id, name }) => {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = name || id;
+      anthropicModelSelect.appendChild(opt);
+    });
+    anthropicModelSelect.value = savedModel || (models[0]?.id ?? 'claude-haiku-4-5-20251001');
+  } catch {
+    const opt = document.createElement('option');
+    opt.value = savedModel || 'claude-haiku-4-5-20251001';
+    opt.textContent = savedModel || 'claude-haiku-4-5-20251001';
+    anthropicModelSelect.innerHTML = '';
+    anthropicModelSelect.appendChild(opt);
+  }
+}
+
 // ─── Load settings ────────────────────────────────────────────────────────────
 async function loadSettings() {
   await migrateFromSync();
@@ -116,6 +140,8 @@ async function loadSettings() {
     'openaiModel',
     'openrouterApiKey',
     'openrouterModel',
+    'anthropicApiKey',
+    'anthropicModel',
     'distillerPrompt',
     'distillerLang',
     'postComment',
@@ -140,6 +166,10 @@ async function loadSettings() {
   const orModel = s.openrouterModel ?? '';
   modelInput.value = orModel;
   if (orModel) validateAndShowModel(orModel);
+
+  // Anthropic
+  document.getElementById('anthropicApiKey').value = s.anthropicApiKey ?? '';
+  await populateAnthropicModels(s.anthropicModel);
 
   // Prompt & language
   document.getElementById('distillerPrompt').value = s.distillerPrompt || DEFAULT_PROMPT;
@@ -173,6 +203,8 @@ saveBtn.addEventListener('click', async () => {
     openaiModel: document.getElementById('openaiModel').value.trim() || 'gpt-4o-mini',
     openrouterApiKey: document.getElementById('openrouterApiKey').value.trim(),
     openrouterModel: modelInput.value.trim(),
+    anthropicApiKey: document.getElementById('anthropicApiKey').value.trim(),
+    anthropicModel: anthropicModelSelect.value || 'claude-haiku-4-5-20251001',
     distillerPrompt: document.getElementById('distillerPrompt').value.trim() || DEFAULT_PROMPT,
     distillerLang: langSelect.value || detectBrowserLang(),
     postComment: document.getElementById('postComment').checked,
@@ -189,6 +221,7 @@ saveBtn.addEventListener('click', async () => {
     gemini: 'geminiApiKey',
     openai: 'openaiApiKey',
     openrouter: 'openrouterApiKey',
+    anthropic: 'anthropicApiKey',
   };
   if (!settings[keyFieldMap[provider]]) {
     statusEl.textContent = chrome.i18n.getMessage('msg_no_key') || 'API key required.';
