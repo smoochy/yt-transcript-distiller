@@ -35,12 +35,13 @@ jobs:
           name: yt-transcript-distiller-${{ github.sha }}
           path: web-ext-artifacts/*.xpi
 
-      - name: Check if HEAD already tagged (auto mode only)
+      - name: Check if release tag already exists (auto mode only)
         if: github.event_name == 'push'
         id: already_tagged
         run: |
           git fetch --tags --quiet
-          if git tag --points-at HEAD | grep -qE '^v'; then
+          VERSION=$(awk '/^## \[/{gsub(/^## \[|\].*$/, ""); print; exit}' CHANGELOG.md)
+          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
@@ -50,20 +51,8 @@ jobs:
         if: steps.already_tagged.outputs.skip != 'true'
         id: tag
         run: |
-          git fetch --tags --quiet
-          UPSTREAM_VERSION=$(jq -r .version package.json)
-          git fetch origin main --quiet
-          SMOOCHY_COMMITS=$(git log origin/main..HEAD --oneline | wc -l | tr -d ' ')
-          if [ "$SMOOCHY_COMMITS" -eq 0 ]; then
-            TAG="v${UPSTREAM_VERSION}"
-          else
-            LAST_N=$(git tag -l "v${UPSTREAM_VERSION}-smoochy-v*" \
-              | sed "s/v${UPSTREAM_VERSION}-smoochy-v//" \
-              | sort -n | tail -1)
-            N=$(( ${LAST_N:-0} + 1 ))
-            TAG="v${UPSTREAM_VERSION}-smoochy-v${N}"
-          fi
-          VERSION="${TAG#v}"
+          VERSION=$(awk '/^## \[/{gsub(/^## \[|\].*$/, ""); print; exit}' CHANGELOG.md)
+          TAG="v${VERSION}"
           BODY=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## /{exit} found && NF{print}" CHANGELOG.md)
           if [ -z "$BODY" ]; then BODY="No changelog entry for ${VERSION}."; fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
