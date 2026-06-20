@@ -790,7 +790,7 @@ import { exportToGitHub } from './github-export.js';
     document.body.appendChild(overlay);
 
     // Load current values — hide API section if key already set
-    chrome.storage.sync.get(['geminiApiKey', 'distillerPrompt', 'distillerLang', 'invalidKey'], (r) => {
+    chrome.storage.local.get(['geminiApiKey', 'distillerPrompt', 'distillerLang', 'invalidKey'], (r) => {
       const hasKey = !!(r.geminiApiKey && r.geminiApiKey.trim());
       const keyInvalid = !!(r.invalidKey);
 
@@ -839,7 +839,7 @@ import { exportToGitHub } from './github-export.js';
 
       // If API section hidden, save without touching the key
       if (apiSection.style.display === 'none') {
-        chrome.storage.sync.set({ distillerPrompt: prompt, distillerLang: lang }, () => {
+        chrome.storage.local.set({ distillerPrompt: prompt, distillerLang: lang }, () => {
           if (chrome.runtime.lastError) {
             status.style.color = '#f87171';
             status.textContent = chrome.i18n.getMessage('msg_save_error');
@@ -859,7 +859,7 @@ import { exportToGitHub } from './github-export.js';
         return;
       }
 
-      chrome.storage.sync.set({ geminiApiKey: key, distillerPrompt: prompt, distillerLang: lang, invalidKey: false }, () => {
+      chrome.storage.local.set({ geminiApiKey: key, distillerPrompt: prompt, distillerLang: lang, invalidKey: false }, () => {
         if (chrome.runtime.lastError) {
           status.style.color = '#f87171';
           status.textContent = chrome.i18n.getMessage('msg_save_error');
@@ -959,46 +959,6 @@ import { exportToGitHub } from './github-export.js';
     }
   }
 
-  // --- GEMINI API CALL ---
-  async function callGeminiApi(apiKey, prompt, transcriptText) {
-    const model = 'gemini-2.5-flash';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-    const body = {
-      contents: [{
-        parts: [{
-          text: `${prompt}\n\n${transcriptText}`
-        }]
-      }],
-      generationConfig: {
-        temperature: 0.4,
-        maxOutputTokens: 8192,
-        thinkingConfig: {
-          thinkingBudget: 0
-        }
-      }
-    };
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      const msg = errBody?.error?.message || `HTTP ${res.status}`;
-      if (res.status === 401 || res.status === 403) {
-        chrome.storage.sync.set({ invalidKey: true });
-      }
-      throw new Error(`Gemini API Fehler: ${msg}`);
-    }
-
-    const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) throw new Error("Gemini hat keine verwertbare Antwort zurückgegeben.");
-    return text.trim();
-  }
 
   // --- MAIN DISTILLER LOGIC ---
   const AMO_LINK = 'addons.mozilla.org/addon/youtube-transcript-distiller';
