@@ -4,15 +4,19 @@ on:
   push:
     branches:
       - smoochy/composite
-    tags:
-      - "v*"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_PAT }}
 
       - uses: actions/setup-node@v4
         with:
@@ -31,16 +35,62 @@ jobs:
           name: yt-transcript-distiller-${{ github.sha }}
           path: web-ext-artifacts/*.zip
 
-      - name: Extract release notes
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Check if HEAD already tagged (auto mode only)
+        if: github.event_name == 'push'
+        id: already_tagged
         run: |
-          bash scripts/extract-release-notes.sh "${GITHUB_REF_NAME#v}"
+          git fetch --tags --quiet
+          if git tag --points-at HEAD | grep -qE '^v'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute release tag
+        if: steps.already_tagged.outputs.skip != 'true'
+        id: tag
+        run: |
+          git fetch --tags --quiet
+          UPSTREAM_VERSION=$(jq -r .version package.json)
+          git fetch origin main --quiet
+          SMOOCHY_COMMITS=$(git log origin/main..HEAD --oneline | wc -l | tr -d ' ')
+          if [ "$SMOOCHY_COMMITS" -eq 0 ]; then
+            TAG="v${UPSTREAM_VERSION}"
+          else
+            LAST_N=$(git tag -l "v${UPSTREAM_VERSION}-smoochy-v*" \
+              | sed "s/v${UPSTREAM_VERSION}-smoochy-v//" \
+              | sort -n | tail -1)
+            N=$(( ${LAST_N:-0} + 1 ))
+            TAG="v${UPSTREAM_VERSION}-smoochy-v${N}"
+          fi
+          PREV_TAG=$(git tag --sort=-creatordate | grep -E '^v' | head -1)
+          if [ -n "$PREV_TAG" ]; then
+            BODY=$(git log "${PREV_TAG}..HEAD" --oneline --no-decorate)
+          else
+            BODY=$(git log HEAD --oneline --no-decorate)
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$BODY" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Delete existing release if same tag exists (manual mode only)
+        if: github.event_name == 'workflow_dispatch' && steps.tag.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          if gh release view "$TAG" &>/dev/null; then
+            gh release delete "$TAG" --yes --cleanup-tag
+          fi
 
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.already_tagged.outputs.skip != 'true' && steps.tag.outputs.tag != ''
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ${{ steps.tag.outputs.tag }}
           files: web-ext-artifacts/*.zip
-          body_path: RELEASE_NOTES.md
+          body: ${{ steps.tag.outputs.body }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
