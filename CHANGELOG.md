@@ -18,6 +18,7 @@
 ### Changed
 - `package.json` version reset to `1.3.1` to mirror upstream (release tag is the canonical version identifier)
 - `build.yml` no longer triggers on `v*` tags; replaced by auto-versioning
+- `populateAnthropicModels()` reads `display_name` instead of `name` to match new `anthropic-models.json` format (full model objects from Anthropic API)
 
 ### Removed
 - `scripts/extract-release-notes.sh` and `RELEASE_NOTES.md` (replaced by git log)
