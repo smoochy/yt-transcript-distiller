@@ -41,3 +41,26 @@ async function getCached(url) {
   if (Date.now() - entry.cachedAt > CACHE_TTL_MS) return null;
   return entry.result;
 }
+
+const OR_MODEL_LIST_CACHE_KEY = 'orFullModelListCache';
+const OR_MODEL_LIST_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+export async function validateModelId(modelsUrl, modelId) {
+  const stored = await chrome.storage.local.get([OR_MODEL_LIST_CACHE_KEY]);
+  const entry = stored[OR_MODEL_LIST_CACHE_KEY];
+
+  let models;
+  if (entry && entry.url === modelsUrl && Date.now() - entry.cachedAt < OR_MODEL_LIST_TTL_MS) {
+    models = entry.models;
+  } else {
+    const res = await fetch(modelsUrl);
+    if (!res.ok) throw new Error(`OpenRouter model list fetch failed: HTTP ${res.status}`);
+    const data = await res.json();
+    models = (data.data ?? []).map(m => m.id);
+    await chrome.storage.local.set({
+      [OR_MODEL_LIST_CACHE_KEY]: { url: modelsUrl, models, cachedAt: Date.now() },
+    });
+  }
+
+  return models.includes(modelId);
+}

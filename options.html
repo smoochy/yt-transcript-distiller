@@ -151,7 +151,11 @@
       <h2>OpenRouter</h2>
       <label for="openrouterApiKey">API Key</label>
       <input type="password" id="openrouterApiKey" placeholder="sk-or-v1-…" autocomplete="off" spellcheck="false">
-      <label for="openrouterModel">Model or Model List URL</label>
+      <label for="openrouterCustomModel">Custom Model ID <span class="hint" style="display:inline">(optional — takes priority over URL below)</span></label>
+      <input type="text" id="openrouterCustomModel"
+             placeholder="e.g. openrouter/auto  or  anthropic/claude-3-haiku">
+      <div id="openrouterCustomModelError" style="display:none; color:#f87171; font-size:0.85em; margin-top:4px;"></div>
+      <label for="openrouterModel" id="openrouterModelLabel">Model or Model List URL</label>
       <input type="text" id="openrouterModel"
              placeholder="openrouter/auto  or  https://…/models.json">
       <div class="help-text">

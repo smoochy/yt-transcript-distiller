@@ -1,4 +1,4 @@
-import { resolveModel, clearModelCache } from '../model-list.js';
+import { resolveModel, clearModelCache, validateModelId } from '../model-list.js';
 import { fetchAnthropicModels } from '../anthropic-model-list.js';
 
 // ─── Migration from legacy chrome.storage.sync ────────────────────────────────
@@ -62,6 +62,9 @@ providerSelect.addEventListener('change', () => showProviderSection(providerSele
 // ─── OpenRouter model field validation ───────────────────────────────────────
 const modelInput = document.getElementById('openrouterModel');
 const modelStatus = document.getElementById('modelStatus');
+const customModelInput = document.getElementById('openrouterCustomModel');
+const customModelError = document.getElementById('openrouterCustomModelError');
+const orModelLabel = document.getElementById('openrouterModelLabel');
 
 async function validateAndShowModel(modelField) {
   if (!modelField) {
@@ -87,6 +90,13 @@ async function validateAndShowModel(modelField) {
 }
 
 modelInput.addEventListener('blur', () => validateAndShowModel(modelInput.value.trim()));
+
+function updateOrModelLabelStyle() {
+  const filled = customModelInput.value.trim().length > 0;
+  orModelLabel.style.color = filled ? '#555' : '';
+}
+
+customModelInput.addEventListener('input', updateOrModelLabelStyle);
 
 document.getElementById('reloadModelBtn').addEventListener('click', async () => {
   await clearModelCache();
@@ -140,6 +150,7 @@ async function loadSettings() {
     'openaiModel',
     'openrouterApiKey',
     'openrouterModel',
+    'openrouterCustomModel',
     'anthropicApiKey',
     'anthropicModel',
     'distillerPrompt',
@@ -166,6 +177,9 @@ async function loadSettings() {
   const orModel = s.openrouterModel ?? '';
   modelInput.value = orModel;
   if (orModel) validateAndShowModel(orModel);
+
+  customModelInput.value = s.openrouterCustomModel ?? '';
+  updateOrModelLabelStyle();
 
   // Anthropic
   document.getElementById('anthropicApiKey').value = s.anthropicApiKey ?? '';
@@ -196,6 +210,29 @@ const statusEl = document.getElementById('status');
 saveBtn.addEventListener('click', async () => {
   const provider = providerSelect.value;
 
+  // Validate openrouterCustomModel against OpenRouter API if non-empty
+  const customModel = customModelInput.value.trim();
+  if (provider === 'openrouter' && customModel) {
+    customModelError.style.display = 'none';
+    try {
+      const valid = await validateModelId(
+        'https://openrouter.ai/api/v1/models',
+        customModel
+      );
+      if (!valid) {
+        customModelError.textContent = `Model '${customModel}' not found on OpenRouter. Check the ID and try again.`;
+        customModelError.style.display = 'block';
+        return; // do not save
+      }
+    } catch (e) {
+      customModelError.textContent = `Could not validate model: ${e.message}`;
+      customModelError.style.display = 'block';
+      return; // do not save
+    }
+  } else {
+    customModelError.style.display = 'none';
+  }
+
   const settings = {
     provider,
     geminiApiKey: document.getElementById('geminiApiKey').value.trim(),
@@ -203,6 +240,7 @@ saveBtn.addEventListener('click', async () => {
     openaiModel: document.getElementById('openaiModel').value.trim() || 'gpt-4o-mini',
     openrouterApiKey: document.getElementById('openrouterApiKey').value.trim(),
     openrouterModel: modelInput.value.trim(),
+    openrouterCustomModel: customModel,
     anthropicApiKey: document.getElementById('anthropicApiKey').value.trim(),
     anthropicModel: anthropicModelSelect.value || 'claude-haiku-4-5-20251001',
     distillerPrompt: document.getElementById('distillerPrompt').value.trim() || DEFAULT_PROMPT,

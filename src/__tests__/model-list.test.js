@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 global.fetch = jest.fn();
 
-import { resolveModel, clearModelCache } from '../model-list.js';
+import { resolveModel, clearModelCache, validateModelId } from '../model-list.js';
 
 const VALID_MODELS_JSON = {
   generated_at: '2026-06-20T00:00:00Z',
@@ -50,4 +50,41 @@ test('throws on HTTP error', async () => {
   fetch.mockResolvedValueOnce({ ok: false, status: 404, json: async () => ({}) });
 
   await expect(resolveModel('https://example.com/missing.json')).rejects.toThrow('HTTP 404');
+});
+
+// ─── validateModelId ───────────────────────────────────────────────────────────
+describe('validateModelId', () => {
+  const OR_MODELS_URL = 'https://openrouter.ai/api/v1/models';
+  const OR_MODELS_RESPONSE = {
+    data: [
+      { id: 'openrouter/auto' },
+      { id: 'anthropic/claude-3-haiku' },
+    ],
+  };
+
+  beforeEach(async () => {
+    fetch.mockClear();
+    chrome.storage.local.clear();
+    await clearModelCache();
+  });
+
+  test('returns true for known model id', async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => OR_MODELS_RESPONSE });
+    const result = await validateModelId(OR_MODELS_URL, 'openrouter/auto');
+    expect(result).toBe(true);
+  });
+
+  test('returns false for unknown model id', async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => OR_MODELS_RESPONSE });
+    const result = await validateModelId(OR_MODELS_URL, 'nonexistent/model');
+    expect(result).toBe(false);
+  });
+
+  test('uses cached fetch — no double fetch', async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => OR_MODELS_RESPONSE });
+    await validateModelId(OR_MODELS_URL, 'openrouter/auto');
+    fetch.mockClear();
+    await validateModelId(OR_MODELS_URL, 'anthropic/claude-3-haiku');
+    expect(fetch).not.toHaveBeenCalled();
+  });
 });
