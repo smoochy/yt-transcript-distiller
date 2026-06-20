@@ -12,6 +12,8 @@
 - Anthropic provider (`AnthropicProvider`) using Messages API with `claude-haiku-4-5-20251001` default model
 - `fetchAnthropicModels()` with 48h cache in `chrome.storage.local` fetching from openrouter-model-list repo
 - OpenRouter `openrouterCustomModel` override support in provider factory
+- OpenRouter custom model free-text field in options UI with live validation against OpenRouter `/api/v1/models`; invalid IDs blocked from saving with inline error message
+- `validateModelId(modelsUrl, modelId)` in `model-list.js` with 1h `chrome.storage.local` cache
 - `https://api.anthropic.com/*` added to manifest permissions
 - Anthropic section in options UI: API key field + model dropdown populated from `fetchAnthropicModels()` with error fallback; `anthropicApiKey` and `anthropicModel` saved to `chrome.storage.local`
 
