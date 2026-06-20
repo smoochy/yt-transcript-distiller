@@ -613,10 +613,10 @@ import { exportToGitHub } from './github-export.js';
 		});
 	  }
 
-	  // 1. Try browser.storage.sync (or chrome.storage.sync for compatibility)
-	  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+	  // 1. Try browser.storage.local (or chrome.storage.local for compatibility)
+	  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
 		try {
-		  const storedSettings = await getStoragePromise(chrome.storage.sync);
+		  const storedSettings = await getStoragePromise(chrome.storage.local);
 		  // Merge with default settings to ensure all keys are present
 		  return { ...defaultSettings, ...storedSettings };
 		} catch (e) {
@@ -638,10 +638,10 @@ import { exportToGitHub } from './github-export.js';
 
 	// Function to set settings (similar robustness needed)
 	function setSettings(settings) {
-	  // 1. Try browser.storage.sync (or chrome.storage.sync)
-	  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+	  // 1. Try browser.storage.local (or chrome.storage.local)
+	  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
 		try {
-		  chrome.storage.sync.set(settings, () => {
+		  chrome.storage.local.set(settings, () => {
 			if (chrome.runtime.lastError) {
 			  console.warn("YouTube Transcript Copier: Error setting Chrome storage:", chrome.runtime.lastError);
 			  // Fallback to localStorage if setting sync storage fails
@@ -1079,7 +1079,7 @@ import { exportToGitHub } from './github-export.js';
       }
 
       // Statistik-Ping nur wenn Telemetrie aktiviert (default: an)
-      chrome.storage.sync.get(['telemetryEnabled'], (r) => {
+      chrome.storage.local.get(['telemetryEnabled'], (r) => {
         if (r.telemetryEnabled !== false) {
           pingStats(langCode, navigator.language || 'unknown', chrome.i18n.getUILanguage() || 'unknown');
         }

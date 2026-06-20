@@ -3,7 +3,8 @@ import { OpenAICompatProvider } from './openai-compat.js';
 import { resolveModel } from '../model-list.js';
 
 export async function createProvider(settings) {
-  const { provider } = settings;
+  // default to gemini if provider not yet set
+  const provider = settings.provider || 'gemini';
 
   if (provider === 'gemini') {
     return new GeminiProvider({ apiKey: settings.geminiApiKey });

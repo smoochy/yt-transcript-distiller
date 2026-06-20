@@ -2,7 +2,8 @@ const GITHUB_API = 'https://api.github.com';
 
 export async function exportToGitHub({ pat, repo, subfolder, format, videoId, title, url, date, provider, model, summary, transcript }) {
   const errors = [];
-  const folder = subfolder.endsWith('/') ? subfolder : `${subfolder}/`;
+  const subfolder_ = subfolder || 'yt-summaries';
+  const folder = subfolder_.endsWith('/') ? subfolder_ : `${subfolder_}/`;
 
   if (format === 'markdown' || format === 'both') {
     try {
@@ -47,8 +48,11 @@ async function pushFile({ pat, repo, path, content }) {
     throw new Error(`GitHub GET failed: HTTP ${getRes.status}`);
   }
 
-  // UTF-8 safe base64: use TextEncoder (always available in modern environments)
-  const encoded = btoa(String.fromCharCode(...new TextEncoder().encode(content)));
+  // UTF-8 safe base64: loop avoids spread stack overflow on large transcripts
+  const bytes = new TextEncoder().encode(content);
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  const encoded = btoa(binary);
 
   const body = { message: `Add ${path.split('/').pop()}`, content: encoded };
   if (sha) body.sha = sha;
