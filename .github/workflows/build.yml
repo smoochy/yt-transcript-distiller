@@ -3,7 +3,7 @@ name: Build extension
 on:
   push:
     branches:
-      - smoochy/composite
+      - main
   workflow_dispatch:
 
 permissions:

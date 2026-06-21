@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: upstream-sync
           token: ${{ secrets.SYNC_PAT }}
           fetch-depth: 0
 
@@ -30,7 +30,7 @@ jobs:
         run: git merge --ff-only upstream/main
 
       - name: Push
-        run: git push origin main
+        run: git push origin upstream-sync
 
       - name: Trigger composite rebase
         uses: peter-evans/repository-dispatch@v3
