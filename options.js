@@ -83,9 +83,9 @@
 
   // src/options/options.js
   async function migrateFromSync() {
-    const local = await chrome.storage.local.get(["provider"]);
+    const local = await chrome.storage.local.get(["provider"]) ?? {};
     if (local.provider) return;
-    const sync = await chrome.storage.sync.get(["geminiApiKey", "distillerPrompt", "distillerLang"]);
+    const sync = await chrome.storage.sync.get(["geminiApiKey", "distillerPrompt", "distillerLang"]) ?? {};
     if (!sync.geminiApiKey) return;
     await chrome.storage.local.set({
       provider: "gemini",
@@ -211,7 +211,7 @@
       "githubRepo",
       "githubSubfolder",
       "githubFormat"
-    ]);
+    ]) ?? {};
     providerSelect.value = s.provider ?? "gemini";
     showProviderSection(providerSelect.value);
     document.getElementById("geminiApiKey").value = s.geminiApiKey ?? "";

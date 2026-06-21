@@ -2,6 +2,9 @@
 
 ## [1.3.1-smoochy-v1] – 2026-06-20
 
+### Fixed
+- `chrome.storage.local.get` returns `undefined` instead of `{}` in Firefox options page context; add `?? {}` fallback in `migrateFromSync` and `loadSettings` to prevent crash before `populateAnthropicModels` runs (caused empty model dropdown)
+
 ### Added
 - AMO unlisted signing in `build.yml`: `.xpi` is now Mozilla-signed via `web-ext sign --channel=unlisted` before release, enabling direct Firefox installation without browser workarounds (`AMO_JWT_ISSUER` + `AMO_JWT_SECRET` GitHub secrets required)
 - Multi-provider AI support: Anthropic/Claude, OpenAI, and OpenRouter alongside Gemini

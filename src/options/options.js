@@ -3,9 +3,9 @@ import { fetchAnthropicModels } from '../anthropic-model-list.js';
 
 // ─── Migration from legacy chrome.storage.sync ────────────────────────────────
 async function migrateFromSync() {
-  const local = await chrome.storage.local.get(['provider']);
+  const local = (await chrome.storage.local.get(['provider'])) ?? {};
   if (local.provider) return; // already configured with new schema
-  const sync = await chrome.storage.sync.get(['geminiApiKey', 'distillerPrompt', 'distillerLang']);
+  const sync = (await chrome.storage.sync.get(['geminiApiKey', 'distillerPrompt', 'distillerLang'])) ?? {};
   if (!sync.geminiApiKey) return;
   await chrome.storage.local.set({
     provider: 'gemini',
@@ -143,7 +143,7 @@ async function populateAnthropicModels(savedModel) {
 async function loadSettings() {
   await migrateFromSync();
 
-  const s = await chrome.storage.local.get([
+  const s = (await chrome.storage.local.get([
     'provider',
     'geminiApiKey',
     'openaiApiKey',
@@ -162,7 +162,7 @@ async function loadSettings() {
     'githubRepo',
     'githubSubfolder',
     'githubFormat',
-  ]);
+  ])) ?? {};
 
   // Provider
   providerSelect.value = s.provider ?? 'gemini';
