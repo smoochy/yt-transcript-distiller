@@ -1,8 +1,9 @@
 # Changelog
 
-## [Unreleased]
+## [1.3.1-smoochy-v2] – 2026-07-13
 
 ### Fixed
+- `build.yml`: AMO signing now skipped when the release tag already exists — signing ran unconditionally on every main push, and AMO rejects re-uploads of an existing version ("Version 1.3.1.2 already exists"); tag-exists check moved before the sign step, Sign/Upload gated on it
 - `sync.yml`: replace `git merge --ff-only upstream/main` with `git reset --hard upstream/main` + `git push --force-with-lease`; `upstream-sync` is a pure upstream mirror, so mirror-reset always succeeds — ff-merge failed permanently after the branch rename left `upstream-sync` pointing at full fork history (diverged from upstream)
 
 ## [1.3.1-smoochy-v1] – 2026-06-20
