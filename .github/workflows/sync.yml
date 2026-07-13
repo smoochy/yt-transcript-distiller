@@ -26,11 +26,11 @@ jobs:
       - name: Fetch upstream
         run: git fetch upstream main
 
-      - name: Fast-forward merge
-        run: git merge --ff-only upstream/main
+      - name: Mirror upstream main
+        run: git reset --hard upstream/main
 
       - name: Push
-        run: git push origin upstream-sync
+        run: git push --force-with-lease origin upstream-sync
 
       - name: Trigger composite rebase
         uses: peter-evans/repository-dispatch@v3

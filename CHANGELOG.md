@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- `sync.yml`: replace `git merge --ff-only upstream/main` with `git reset --hard upstream/main` + `git push --force-with-lease`; `upstream-sync` is a pure upstream mirror, so mirror-reset always succeeds — ff-merge failed permanently after the branch rename left `upstream-sync` pointing at full fork history (diverged from upstream)
+
 ## [1.3.1-smoochy-v1] – 2026-06-20
 
 ### Fixed
